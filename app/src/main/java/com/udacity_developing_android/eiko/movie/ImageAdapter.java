@@ -17,19 +17,22 @@ import java.util.ArrayList;
  * Created by eiko on 8/12/2017.
  */
 
-public class ImageAdapter extends ArrayAdapter<Poster>{
+public class ImageAdapter extends ArrayAdapter<Poster> {
+    ArrayList<Poster> mGridImage = new ArrayList<>();
     private Context mContext;
     private int layoutResourceId;
-    ArrayList<Poster> mGridImage =
-            new ArrayList<>();
 
     public ImageAdapter(Context mContext, int layoutResourceId,
-                        ArrayList<Poster> mGridImage){
-        super(mContext,layoutResourceId, mGridImage);
+                        ArrayList<Poster> mGridImage) {
+        super(mContext, layoutResourceId, mGridImage);
         this.mContext = mContext;
         this.layoutResourceId = layoutResourceId;
         this.mGridImage = mGridImage;
         notifyDataSetChanged();
+    }
+
+    public Poster getMovie(int position) {
+        return mGridImage.get(position);
     }
 
 //    public void setGridData(ArrayList<Poster> mGridImage){
@@ -42,29 +45,29 @@ public class ImageAdapter extends ArrayAdapter<Poster>{
                         ViewGroup parent) {
 
         ViewHolder holder;
-        if (convertView == null){
-            LayoutInflater inflater = ((Activity)mContext)
+        if (convertView == null) {
+            LayoutInflater inflater = ((Activity) mContext)
                     .getLayoutInflater();
-            convertView = inflater.inflate(R.layout.image_grid, parent
-            ,false);
+            convertView = inflater.inflate(
+                    R.layout.image_grid, parent, false);
             holder = new ViewHolder();
-            holder.imageview = (ImageView)convertView.findViewById(
-                    R.id.image_for_grid);
+            holder.imageview = (ImageView) convertView.
+                    findViewById(R.id.image_for_grid);
             convertView.setTag(holder);
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-            Poster item = mGridImage.get(position);
-//        Poster url = getItem(position);
-            Picasso.with(mContext).load(item.getImage())
-                    .into(holder.imageview);
+        Poster item = mGridImage.get(position);
+//          Poster url = getItem(position);
+        Picasso.with(mContext).load(item.getImage())
+                .into(holder.imageview);
         Log.v("ImageAdapter", item.getImage());
         return convertView;
     }
 
-    static class ViewHolder{
-        ImageView imageview;
+    static class ViewHolder {
 
+        ImageView imageview;
     }
 }

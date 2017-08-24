@@ -7,12 +7,12 @@
     tools:context="com.udacity_developing_android.eiko.movie.MainActivity">
 
     <GridView
+        android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/gridview"
         android:columnWidth="100dp"
         android:numColumns="auto_fit"
-        android:stretchMode="spacingWidthUniform"/>
-
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp" />
 
 </RelativeLayout>

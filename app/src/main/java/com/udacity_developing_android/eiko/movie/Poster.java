@@ -8,39 +8,42 @@ import android.os.Parcelable;
  */
 
 public class Poster implements Parcelable {
+    public static final Creator<Poster> CREATOR =
+            new Creator<Poster>() {
+                @Override
+                public Poster createFromParcel(Parcel in) {
+                    return new Poster(in);
+                }
+
+                @Override
+                public Poster[] newArray(int size) {
+                    return new Poster[size];
+                }
+            };
     private String poster_path;
     private String overview;
     private String title;
     private String release_date;
     private double vote_average;
-
+    private int id;
 
     public Poster(String title, String releasedate,
                   double rate, String overview,
-                  String poster_path) {
+                  String poster_path, int id) {
         this.title = title;
         this.release_date = releasedate;
         this.vote_average = rate;
         this.overview = overview;
         this.poster_path = poster_path;
+        this.id = id;
     }
 
     protected Poster(Parcel in) {
         poster_path = in.readString();
+        title = in.readString();
+        id = in.readInt();
+
     }
-
-    public static final Creator<Poster> CREATOR =
-            new Creator<Poster>() {
-        @Override
-        public Poster createFromParcel(Parcel in) {
-            return new Poster(in);
-        }
-
-        @Override
-        public Poster[] newArray(int size) {
-            return new Poster[size];
-        }
-    };
 
     public String getImage() {
         return poster_path;
@@ -50,6 +53,26 @@ public class Poster implements Parcelable {
 //        this.poster = image;
 //    }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getReleaseDate() {
+        return release_date;
+    }
+
+    public double getVoteAverage() {
+        return vote_average;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -58,5 +81,7 @@ public class Poster implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(poster_path);
+        dest.writeString(title);
+
     }
 }

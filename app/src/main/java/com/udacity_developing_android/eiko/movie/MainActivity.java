@@ -1,12 +1,17 @@
 package com.udacity_developing_android.eiko.movie;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,15 +25,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GridView gridview;
-    private ProgressBar progressbar;
     ImageAdapter mImageAdapter;
     ArrayList<Poster> mGridImage;
-//    String URL_IMAGE = "http://image.tmdb.org/t/p/w185";
+    String SORT_CHOSEN;
+    private GridView gridview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,45 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.image_grid, mGridImage);
         gridview.setAdapter(mImageAdapter);
         new AsyncHttpTask().execute();
+        gridview.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        Poster current = mImageAdapter.getItem(position);
+
+                        Intent intent = new Intent(MainActivity.this,
+                                DetailActivity.class);
+//                intent.putExtra("image", gridItem.getImage());
+                        intent.putExtra(intent.EXTRA_TEXT, current.getTitle());
+                        startActivity(intent);
+                        Log.v("MainActivity", "poster clicked");
+                    }
+                });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflator = getMenuInflater();
+        menuInflator.inflate(R.menu.sort_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_popular:
+                SORT_CHOSEN = "popular";
+                new AsyncHttpTask().execute();
+                return true;
+            case R.id.sort_top_rated:
+                SORT_CHOSEN = "top_rated";
+                new AsyncHttpTask().execute();
+                return true;
+//            default:
+//                super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class AsyncHttpTask extends AsyncTask<Void,
@@ -50,26 +92,39 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-        public String API_KEY = "my api key";
-        String SORT = "popular";
-        String SORT_TARE = "top_rated";
+        public String API_KEY = "API key";
+        String SORT_POPULAR = "popular";
+        String SORT_TOPRATED = "top_rated";
 
         @Override
         protected Poster[] doInBackground(Void... params) {
             HttpURLConnection urlConnect = null;
             BufferedReader buffReader = null;
             String result = null;
+            Uri uri = null;
             try {
-                Uri uri = new Uri.Builder()
-                        .scheme(SCHEME)
-                        .authority(URL_BASE)
-                        .appendPath(PATH_ONE)
-                        .appendPath(PATH_TWO)
-                        .appendPath(SORT)
-                        .appendQueryParameter("api_key", API_KEY )
-                        .build();
-                Log.v("MainActivity.java", uri.toString());
+                if (SORT_CHOSEN == null) {
+                    uri = new Uri.Builder()
+                            .scheme(SCHEME)
+                            .authority(URL_BASE)
+                            .appendPath(PATH_ONE)
+                            .appendPath(PATH_TWO)
+                            .appendPath(SORT_POPULAR)
+                            .appendQueryParameter("api_key", API_KEY)
+                            .build();
+                } else {
+                    uri = new Uri.Builder()
+                            .scheme(SCHEME)
+                            .authority(URL_BASE)
+                            .appendPath(PATH_ONE)
+                            .appendPath(PATH_TWO)
+                            .appendPath(SORT_CHOSEN)
+                            .appendQueryParameter("api_key", API_KEY)
+                            .build();
+                }
+
                 String makeUrl = uri.toString();
+                Log.v("MainActivity", makeUrl);
                 URL url = new URL(makeUrl);
                 urlConnect = (HttpURLConnection) url.openConnection();
                 urlConnect.setRequestMethod("GET");
@@ -79,11 +134,11 @@ public class MainActivity extends AppCompatActivity {
                 buffReader = new BufferedReader(
                         new InputStreamReader(is));
                 String line;
-                while ((line = buffReader.readLine())!= null) {
+                while ((line = buffReader.readLine()) != null) {
                     sb.append(line + "\n");
                     Log.v("line ", line);
                 }
-                if (sb.length()==0){
+                if (sb.length() == 0) {
                     return null;
                 }
                 result = sb.toString();
@@ -94,15 +149,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             try {
-                return catchingdata(result);
+                return catchingData(result);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.v("catcningdate", "jsooon exception",e);
+                Log.v("catchingData", "JSON exception", e);
+                return null;
             }
-            return null;
         }
 
-        private Poster[] catchingdata(String result) throws
+        private Poster[] catchingData(String result) throws
                 JSONException {
             String RESULTS = "results";
             String POSTER_PATH = "poster_path";
@@ -110,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
             String TITLE = "title";
             String RELEASE_DATE = "release_date";
             String VOTE_AVERAGE = "vote_average";
+            String ID = "id";
 
             JSONObject fetchJSON = new JSONObject(result);
             JSONArray jsonArray = fetchJSON.getJSONArray(RESULTS);
@@ -120,16 +176,19 @@ public class MainActivity extends AppCompatActivity {
                 String releasedate = getJSon.getString(RELEASE_DATE);
                 double rate = getJSon.getDouble(VOTE_AVERAGE);
                 String overview = getJSon.getString(OVERVIEW);
+                int id = getJSon.getInt(ID);
 //                Uri imagepath = new Uri.Builder().scheme(SCHEME)
 //                        .authority(IMAGE)
 //                        .appendEncodedPath(getJSon.getString(POSTER_PATH))
 //                        .build();
                 String poster_path = getJSon.getString(POSTER_PATH);
-                String poster_url = IMAGE_PATH +poster_path;
-                Log.v("mainactivity",poster_url);
+                String poster_url = IMAGE_PATH + poster_path;
+                Log.v("MainActivity", poster_url);
                 movieArray[i] = new Poster(title,
-                        releasedate, rate, overview, poster_url);
+                        releasedate, rate, overview,
+                        poster_url, id);
             }
+            Log.v("Mainactivity", String.valueOf(movieArray));
             return movieArray;
         }
 
@@ -139,7 +198,16 @@ public class MainActivity extends AppCompatActivity {
 //                mImageAdapter = new ImageAdapter(getAc(),
 //                        Arrays.asList(posters));
 //            }
-            gridview.setAdapter(mImageAdapter);
+//            gridview.setAdapter(mImageAdapter);
+//            mImageAdapter.setGridData(posters);
+//            mImageAdapter.notifyDataSetChanged();
+            if (posters != null) {
+                for (int p = 0; p < posters.length; ++p) {
+                    mGridImage.add(p, posters[p]);
+                }
+            }
+
+            mImageAdapter.notifyDataSetChanged();
 
         }
     }
