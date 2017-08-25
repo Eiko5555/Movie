@@ -31,15 +31,6 @@ public class ImageAdapter extends ArrayAdapter<Poster> {
         notifyDataSetChanged();
     }
 
-    public Poster getMovie(int position) {
-        return mGridImage.get(position);
-    }
-
-//    public void setGridData(ArrayList<Poster> mGridImage){
-//        this.mGridImage = mGridImage;
-//        notifyDataSetChanged();
-//    }
-
     @Override
     public View getView(int position, View convertView,
                         ViewGroup parent) {
@@ -59,15 +50,13 @@ public class ImageAdapter extends ArrayAdapter<Poster> {
         }
 
         Poster item = mGridImage.get(position);
-//          Poster url = getItem(position);
-        Picasso.with(mContext).load(item.getImage())
+    Picasso.with(mContext).load(item.getImage())
                 .into(holder.imageview);
         Log.v("ImageAdapter", item.getImage());
         return convertView;
     }
 
     static class ViewHolder {
-
         ImageView imageview;
     }
 }

@@ -24,11 +24,11 @@ public class Poster implements Parcelable {
     private String overview;
     private String title;
     private String release_date;
-    private double vote_average;
+    private String vote_average;
     private int id;
 
     public Poster(String title, String releasedate,
-                  double rate, String overview,
+                  String rate, String overview,
                   String poster_path, int id) {
         this.title = title;
         this.release_date = releasedate;
@@ -41,17 +41,15 @@ public class Poster implements Parcelable {
     protected Poster(Parcel in) {
         poster_path = in.readString();
         title = in.readString();
+        release_date = in.readString();
+        vote_average = in.readString();
+        overview = in.readString();
         id = in.readInt();
-
     }
 
     public String getImage() {
         return poster_path;
     }
-
-//    public void setImage(String image) {
-//        this.poster = image;
-//    }
 
     public int getId() {
         return id;
@@ -69,7 +67,7 @@ public class Poster implements Parcelable {
         return release_date;
     }
 
-    public double getVoteAverage() {
+    public String getVoteAverage() {
         return vote_average;
     }
 
@@ -82,6 +80,8 @@ public class Poster implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(poster_path);
         dest.writeString(title);
-
+        dest.writeString(release_date);
+        dest.writeString(vote_average);
+        dest.writeString(overview);
     }
 }

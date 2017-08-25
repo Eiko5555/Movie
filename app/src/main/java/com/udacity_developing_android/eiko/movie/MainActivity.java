@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     ImageAdapter mImageAdapter;
     ArrayList<Poster> mGridImage;
-    String SORT_CHOSEN;
     private GridView gridview;
+    String SORT_CHOSEN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +46,24 @@ public class MainActivity extends AppCompatActivity {
         new AsyncHttpTask().execute();
         gridview.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-                        Poster current = mImageAdapter.getItem(position);
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Poster current = mImageAdapter.getItem(position);
+//                String item = mGridImage.get(position).getTitle();
 
-                        Intent intent = new Intent(MainActivity.this,
-                                DetailActivity.class);
-//                intent.putExtra("image", gridItem.getImage());
-                        intent.putExtra(intent.EXTRA_TEXT, current.getTitle());
-                        startActivity(intent);
-                        Log.v("MainActivity", "poster clicked");
-                    }
-                });
+                Intent intent = new Intent(MainActivity.this,
+                        DetailActivity.class);
+                intent.putExtra("poster_path", current.getImage());
+                intent.putExtra("title", current.getTitle());
+                intent.putExtra("release_date", current.getReleaseDate());
+                intent.putExtra("vote_average", current.getVoteAverage());
+                intent.putExtra("overview", current.getOverview());
+                startActivity(intent);
+                Log.v("MainActivity","poster clicked");
+            }
+        });
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflator = getMenuInflater();
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch (item.getItemId()){
             case R.id.sort_popular:
                 SORT_CHOSEN = "popular";
                 new AsyncHttpTask().execute();
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             Uri uri = null;
             try {
                 if (SORT_CHOSEN == null) {
-                    uri = new Uri.Builder()
+                     uri = new Uri.Builder()
                             .scheme(SCHEME)
                             .authority(URL_BASE)
                             .appendPath(PATH_ONE)
@@ -112,15 +115,15 @@ public class MainActivity extends AppCompatActivity {
                             .appendPath(SORT_POPULAR)
                             .appendQueryParameter("api_key", API_KEY)
                             .build();
-                } else {
+                }else {
                     uri = new Uri.Builder()
-                            .scheme(SCHEME)
-                            .authority(URL_BASE)
-                            .appendPath(PATH_ONE)
-                            .appendPath(PATH_TWO)
-                            .appendPath(SORT_CHOSEN)
-                            .appendQueryParameter("api_key", API_KEY)
-                            .build();
+                        .scheme(SCHEME)
+                        .authority(URL_BASE)
+                        .appendPath(PATH_ONE)
+                        .appendPath(PATH_TWO)
+                        .appendPath(SORT_CHOSEN)
+                        .appendQueryParameter("api_key", API_KEY)
+                        .build();
                 }
 
                 String makeUrl = uri.toString();
@@ -167,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
             String VOTE_AVERAGE = "vote_average";
             String ID = "id";
 
+            Poster item;
+
             JSONObject fetchJSON = new JSONObject(result);
             JSONArray jsonArray = fetchJSON.getJSONArray(RESULTS);
             Poster[] movieArray = new Poster[jsonArray.length()];
@@ -174,9 +179,10 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject getJSon = jsonArray.getJSONObject(i);
                 String title = getJSon.getString(TITLE);
                 String releasedate = getJSon.getString(RELEASE_DATE);
-                double rate = getJSon.getDouble(VOTE_AVERAGE);
+                String rate = getJSon.getString(VOTE_AVERAGE);
                 String overview = getJSon.getString(OVERVIEW);
                 int id = getJSon.getInt(ID);
+//                item.setTitle(title);
 //                Uri imagepath = new Uri.Builder().scheme(SCHEME)
 //                        .authority(IMAGE)
 //                        .appendEncodedPath(getJSon.getString(POSTER_PATH))
@@ -206,9 +212,7 @@ public class MainActivity extends AppCompatActivity {
                     mGridImage.add(p, posters[p]);
                 }
             }
-
             mImageAdapter.notifyDataSetChanged();
-
         }
     }
 }
