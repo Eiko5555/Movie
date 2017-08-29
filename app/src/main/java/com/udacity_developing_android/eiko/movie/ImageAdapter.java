@@ -50,7 +50,7 @@ public class ImageAdapter extends ArrayAdapter<Poster> {
         }
 
         Poster item = mGridImage.get(position);
-    Picasso.with(mContext).load(item.getImage())
+        Picasso.with(mContext).load(item.getImage())
                 .into(holder.imageview);
         Log.v("ImageAdapter", item.getImage());
         return convertView;

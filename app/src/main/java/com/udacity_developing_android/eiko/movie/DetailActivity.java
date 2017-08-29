@@ -23,13 +23,10 @@ public class DetailActivity extends Activity {
     private TextView tv_summery;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailview);
         Log.v("DetailActivity", "passing onCeate");
-
-//        Intent intent = getIntent();
-//        item = getIntent().getParcelableExtra("current");
 
         imageview = (ImageView) findViewById(R.id.poster);
         tv_title = (TextView) findViewById(R.id.title);
@@ -37,14 +34,6 @@ public class DetailActivity extends Activity {
         tv_rate = (TextView) findViewById(R.id.rating);
         tv_summery = (TextView) findViewById(R.id.summery);
 
-//        if (intent != null) {
-//            String title = intent.getStringExtra("title");
-//        }
-//        tv_title.setText(title);
-
-
-//        if (item != null) {
-//            tv_title.setText(item.getTitle());
         tv_title.setText(getIntent().getExtras().getString("title"));
         tv_releasedate.setText(getIntent().getExtras().getString("release_date"));
         tv_rate.setText(getIntent().getExtras().getString("vote_average"));
