@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
@@ -18,12 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/poster"
             android:orientation="vertical"
-            android:paddingTop="10dp">
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -38,7 +41,7 @@
                     android:paddingBottom="10dp"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    tools:text="title" />
+                    tools:text="stem boatwilly" />
             </LinearLayout>
 
             <LinearLayout
@@ -58,7 +61,7 @@
                     android:layout_height="match_parent"
                     android:paddingBottom="10dp"
                     android:textSize="15sp"
-                    tools:text="release date" />
+                    tools:text="Sep 5th, 2008" />
             </LinearLayout>
 
             <LinearLayout
@@ -77,8 +80,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="10dp"
-                    tools:text="rating" />
+                    tools:text="5" />
             </LinearLayout>
+
+            <ToggleButton
+                android:id="@+id/img_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:elevation="1dp"
+                android:background="@drawable/selector"
+                android:textOff=""
+                android:textOn=""
+                android:layout_gravity="center_vertical"
+                android:paddingBottom="5dp"/>
+
+                <!--android:background="@drawable/selector"/>-->
+                <!--android:src="@android:drawable/btn_star_big_off" />-->
+            <!--android:backgroundTint="#00000000"-->
         </LinearLayout>
 
         <TextView
@@ -87,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/poster"
             android:paddingBottom="5dp"
-            android:paddingTop="5dp"
+            android:paddingTop="10dp"
             android:text="Overview" />
 
         <TextView
@@ -95,7 +113,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_below="@id/tv_summery_title"
-            tools:text="summery" />
-
+            android:paddingTop="10dp"
+            tools:text="movoie over view" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trailerrecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/summery"/>
     </RelativeLayout>
 </ScrollView>

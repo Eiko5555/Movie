@@ -18,7 +18,6 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -106,9 +105,12 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-        public String API_KEY = "api";
+//                public String API_KEY = "api";
+        public String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
+        String VIDEO = "videos";
+        String REVIEWS = "reviews";
 
         @Override
         protected Poster[] doInBackground(Void... params) {
