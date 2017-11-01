@@ -16,8 +16,6 @@ import java.util.List;
  class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHolder> {
     public List<Trailer> trailers;
     public Context context;
-    private static final String YOUTUBE_URL =
-            "https://www.youtube.com/watch?v=";
 
     public TrailerAdapter(Context context, List<Trailer> trailerList)
     {this.context = context;
@@ -33,12 +31,13 @@ import java.util.List;
 
     @Override
     public void onBindViewHolder(TrailerAdapter.ViewHolder holder, int position) {
-
+        final Trailer trailer =  trailers.get(position);
+        holder.trailertitle.setText(trailer.getName());
     }
 
     @Override
    public int getItemCount() {
-      return 0;
+      return trailers.size();
    }
    public static class ViewHolder extends RecyclerView.ViewHolder{
        TextView trailertitle;

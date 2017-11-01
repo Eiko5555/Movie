@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("release_date", current.getReleaseDate());
                         intent.putExtra("vote_average", current.getVoteAverage());
                         intent.putExtra("overview", current.getOverview());
+                        intent.putExtra("id", current.getId());
                         startActivity(intent);
                         Log.v("MainActivity", "poster clicked");
                     }

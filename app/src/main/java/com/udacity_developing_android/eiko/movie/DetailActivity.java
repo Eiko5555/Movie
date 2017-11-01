@@ -49,28 +49,28 @@ public class DetailActivity extends Activity {
     private ToggleButton favoriteButton;
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
-    private String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
+    private String API_KEY = "APIkey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailview);
         Log.v("DetailActivity", "passing onCeate");
-        Poster currentMovie = this.getIntent().getParcelableExtra("movie");
+        Poster currentMovie = this.getIntent().getParcelableExtra("result");
 
         imageview = (ImageView) findViewById(R.id.poster);
         tv_title = (TextView) findViewById(R.id.title);
         tv_releasedate = (TextView) findViewById(R.id.date);
         tv_rate = (TextView) findViewById(R.id.rating);
         tv_summery = (TextView) findViewById(R.id.summery);
+
         favoriteButton = (ToggleButton) findViewById(R.id.img_button);
-        RecyclerView recyclerView = (RecyclerView)findViewById(
-                R.id.trailerrecyclerview) ;
 
         tv_title.setText(getIntent().getExtras().getString("title"));
         tv_releasedate.setText(getIntent().getExtras().getString("release_date"));
         tv_rate.setText(getIntent().getExtras().getString("vote_average"));
         tv_summery.setText(getIntent().getExtras().getString("overview"));
+
         favoriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -111,15 +111,15 @@ public class DetailActivity extends Activity {
 //            }
 //        });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         String image = getIntent().getStringExtra("poster_path");
         Picasso.with(this).load(image).into(imageview);
 
-//        int currentId = currentMovie.getId();
-//        Log.i("detail", ", ID: "+ currentId);
-//        String currentMovieId = String.valueOf(currentId);
-//        Log.i("detail", ", ID: "+ currentMovieId);
+        int currentId = getIntent().getExtras().getInt("id");
+        Log.i("detail", ", ID: "+ currentId);
+        String currentMovieId = String.valueOf(currentId);
+        Log.i("detail", ", ID: "+ currentMovieId);
         this.excuteTrailer();
     }
     private void excuteTrailer(){
@@ -127,10 +127,12 @@ public class DetailActivity extends Activity {
         fetchTrailer.execute();
     }
     private class FetchTrailer extends AsyncTask<String, Void, String>{
-        Intent intent = getIntent();
-        Poster currentMovie = intent.getParcelableExtra("movie");
-        int movieId = currentMovie.getId();
-        String idString = String.valueOf(movieId);
+//        Intent intent = getIntent();
+        //Poster currentMovie = intent.getParcelableExtra("results");
+        //int movieId = currentMovie.getExtra("id").;
+        int mid = getIntent().getExtras().getInt("id");
+        String idString = String.valueOf(mid);
+//        String idString = intent.getStringExtra();
 
         private void getJsonData(String json)throws JSONException{
             JSONObject jsonObject = new JSONObject(json);
