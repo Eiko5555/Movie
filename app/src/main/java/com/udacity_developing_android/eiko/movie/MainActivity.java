@@ -106,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-//                public String API_KEY = "api";
-        public String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
+        public String API_KEY = "API key";
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
         String VIDEO = "videos";

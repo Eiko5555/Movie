@@ -49,7 +49,7 @@ public class DetailActivity extends Activity {
     private ToggleButton favoriteButton;
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
-    private String API_KEY = "APIkey";
+    private String API_KEY = "API key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
