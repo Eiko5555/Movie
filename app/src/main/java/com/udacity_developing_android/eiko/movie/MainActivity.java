@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,23 +30,23 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageAdapter mImageAdapter;
-    ArrayList<Poster> mGridImage;
-    GridView gridview;
-    String SORT_CHOSEN;
-    TextView errorText;
+    private ImageAdapter mImageAdapter;
+    private ArrayList<Poster> mGridImage;
+    private GridView gridview;
+    private String SORT_CHOSEN;
+    private TextView loading_text, error_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gridview);
-        errorText = (TextView) findViewById(R.id.error_text);
+        loading_text = (TextView) findViewById(R.id.loading_text);
+//        error_text = (TextView)findViewById(R.id.error_text);
         gridview = (GridView) findViewById(R.id.gridview);
         mGridImage = new ArrayList<>();
         mImageAdapter = new ImageAdapter(this,
                 R.layout.image_grid, mGridImage);
         gridview.setAdapter(mImageAdapter);
-
         new AsyncHttpTask().execute();
 
         gridview.setOnItemClickListener(
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sort_popular:
                 SORT_CHOSEN = "popular";
                 mGridImage.clear();
-
                 new AsyncHttpTask().execute();
                 mImageAdapter.notifyDataSetChanged();
                 return true;
@@ -92,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
                 mGridImage.clear();
                 new AsyncHttpTask().execute();
                 mImageAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.sort_favorite:
+                Intent intent = new Intent(MainActivity.this, Favorite.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Your Favorite",
+                        Toast.LENGTH_LONG).show();
                 return true;
             default:
                 super.onOptionsItemSelected(item);
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-        public String API_KEY = "API key";
+        public String API_KEY = "KEYS";
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
         String VIDEO = "videos";
@@ -212,14 +216,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Poster[] posters) {
             if (posters != null) {
-                errorText.setVisibility(View.INVISIBLE);
+                loading_text.setVisibility(View.INVISIBLE);
                 mGridImage.clear();
                 for (int p = 0; p < posters.length; ++p) {
                     mGridImage.add(p, posters[p]);
                 }
                 mImageAdapter.notifyDataSetChanged();
             } else {
-                errorText.setVisibility(View.VISIBLE);
+                loading_text.setVisibility(View.VISIBLE);
             }
         }
     }

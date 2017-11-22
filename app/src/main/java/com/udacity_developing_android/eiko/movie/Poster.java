@@ -20,8 +20,7 @@ public class Poster implements Parcelable {
                     return new Poster[size];
                 }
             };
-    private String poster_path, overview, title, release_date,  vote_average
-            ;
+    private String poster_path, overview, title, release_date, vote_average;
     private int id;
 
     public Poster(String title, String releasedate,

@@ -6,12 +6,11 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/trailer_title"
+        android:id="@+id/review_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        tools:text="Title 1" />
+        tools:text="this is the review 1" />
 
 </LinearLayout>

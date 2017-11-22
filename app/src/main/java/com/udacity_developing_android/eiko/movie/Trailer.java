@@ -7,9 +7,7 @@ import android.os.Parcelable;
  * Created by eiko on 10/12/2017.
  */
 
-public class Trailer implements Parcelable{
-
-    public String key, site, name;
+public class Trailer implements Parcelable {
 
     public final static Parcelable.Creator<Trailer> CREATOR
             = new Creator<Trailer>() {
@@ -17,8 +15,6 @@ public class Trailer implements Parcelable{
         public Trailer createFromParcel(Parcel source) {
             Trailer trailerParcel = new Trailer();
             trailerParcel.key = ((String) source.readValue(
-                    String.class.getClassLoader()));
-            trailerParcel.site = ((String) source.readValue(
                     String.class.getClassLoader()));
             trailerParcel.name = ((String) source.readValue(
                     String.class.getClassLoader()));
@@ -30,15 +26,16 @@ public class Trailer implements Parcelable{
             return new Trailer[size];
         }
     };
-    public String getKey(){
+    public String key, name;
+
+    public String getKey() {
         return key;
     }
-    public String getSite(){
-        return site;
+
+    public String getName() {
+        return name;
     }
-    public String getName(){
-        return  name;
-    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -47,7 +44,6 @@ public class Trailer implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(key);
-        dest.writeString(site);
         dest.writeString(name);
     }
 }

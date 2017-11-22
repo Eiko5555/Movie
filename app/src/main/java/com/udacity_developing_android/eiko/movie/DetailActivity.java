@@ -1,18 +1,18 @@
 package com.udacity_developing_android.eiko.movie;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,30 +40,26 @@ import java.util.List;
  */
 
 public class DetailActivity extends Activity {
-    Poster item;
     private ImageView imageview;
-    private TextView tv_title;
-    private TextView tv_releasedate;
-    private TextView tv_rate;
-    private TextView tv_summery;
+    private TextView tv_title, tv_releasedate, tv_rate, tv_summery;
     private ToggleButton favoriteButton;
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
-    private String API_KEY = "API key";
+    private List<String> reviewList = new ArrayList<>();
+    private String API_KEY = "KEYS";
+    private String URL_BASE = "http://api.themoviedb.org/3/movie/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailview);
-        Log.v("DetailActivity", "passing onCeate");
-        Poster currentMovie = this.getIntent().getParcelableExtra("result");
+//        Poster currentMovie = this.getIntent().getParcelableExtra("result");
 
         imageview = (ImageView) findViewById(R.id.poster);
         tv_title = (TextView) findViewById(R.id.title);
         tv_releasedate = (TextView) findViewById(R.id.date);
         tv_rate = (TextView) findViewById(R.id.rating);
         tv_summery = (TextView) findViewById(R.id.summery);
-
         favoriteButton = (ToggleButton) findViewById(R.id.img_button);
 
         tv_title.setText(getIntent().getExtras().getString("title"));
@@ -74,79 +70,110 @@ public class DetailActivity extends Activity {
         favoriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
+                    Log.v("Detail", "favorite clicked");
                     Toast.makeText(DetailActivity.this,
-                        "star clicked", Toast.LENGTH_LONG).show();
-                }else{
+                            "Saved to Favorite", Toast.LENGTH_LONG).show();
+                    saveFavorite();
+                } else {
+                    Log.v("Detail", "favorite removed");
                     Toast.makeText(DetailActivity.this,
-                            "star clicked", Toast.LENGTH_LONG).show();
+                            "Remed from Favorite", Toast.LENGTH_LONG).show();
+//                    deleteFavorite();
                 }
             }
         });
-        //        imgButtonfavorite.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                imgButtonfavorite.setBackgroundResource(R.drawable.selector);
-//                Toast.makeText(DetailActivity.this,
-//                        "star clicked", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        imgButtonfavorite.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                boolean isFavorite = true;
-//                imgButtonfavorite.setImageDrawable(ContextCompat.getDrawable(
-//                        getApplicationContext(),
-//                        android.R.drawable.btn_star_big_on));
-//                if (isFavorite){
-//                    imgButtonfavorite.setImageDrawable(ContextCompat.getDrawable(
-//                            getApplicationContext(),
-//                            android.R.drawable.btn_star_big_on));
-//                }else {
-//                    imgButtonfavorite.setImageDrawable(
-//                            ContextCompat.getDrawable(
-//                            getApplicationContext(),
-//                            android.R.drawable.btn_star_big_off));
-//                }
-//            }
-//        });
-
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         String image = getIntent().getStringExtra("poster_path");
         Picasso.with(this).load(image).into(imageview);
 
         int currentId = getIntent().getExtras().getInt("id");
-        Log.i("detail", ", ID: "+ currentId);
+        Log.i("onCreate in Detail", ",ID: " + currentId);
         String currentMovieId = String.valueOf(currentId);
-        Log.i("detail", ", ID: "+ currentMovieId);
+        Log.i("onCreate in Detail", ", movie ID: " + currentMovieId);
         this.excuteTrailer();
+        this.excuteReviews();
     }
-    private void excuteTrailer(){
+    public void saveFavorite(){
+        Intent intent = getIntent();
+        Poster movie = intent.getParcelableExtra("id");
+        int idmovie = movie.getId();
+//        String mid = String.valueOf(idmovie);
+        String mTitle = movie.getTitle();
+        String mPoster = movie.getImage();
+        String mOverview = movie.getOverview();
+        String mRating = movie.getVoteAverage();
+        String mReleaseDate = movie.getReleaseDate();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, idmovie);
+        contentValues.put(Contract.Entry.COLUMN_TITLE, mTitle);
+        contentValues.put(Contract.Entry.COLUMN_POSTER, mPoster);
+        contentValues.put(Contract.Entry.COLUMN_OVERVIEW, mOverview);
+        contentValues.put(Contract.Entry.COLUMN_RATING, mRating);
+        contentValues.put(Contract.Entry.COLUMN_RELEASEDATE, mReleaseDate);
+        Uri savefavUri = getContentResolver().insert(
+                Contract.Entry.CONTENT_URI, contentValues);
+        Log.i("savefavorite", String.valueOf(savefavUri));
+        Toast.makeText(this, "Saved to favorite",Toast.LENGTH_LONG).show();
+    }
+//    public void deleteFavorite(){
+//        Uri favorite = Contract.Entry.CONTENT_URI;
+//        Intent intent = getIntent();
+//        Poster current = intent.getParcelableExtra("results");
+//        int id = Integer.valueOf(current.getId());
+//        if (favorite != null){
+//            int delete = getContentResolver()
+//                    .delete(Contract.Entry.buildMovieUri(id), null, null);
+//            if (delete == 0){
+//                Toast.makeText(DetailActivity.this,
+//                        "favorite removed",Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        finish();
+//        }
+        public boolean favorite(){
+            Intent intent = getIntent();
+            Poster current = intent.getParcelableExtra("results");
+            String title = current.getTitle();
+            int id = current.getId();
+            Log.i("Detail: favorite", title);
+            Cursor cursor = getContentResolver().query(
+                    Contract.Entry.buildMovieUri(id),null,null,null,null);
+            assert  cursor != null;
+            if(cursor.moveToNext()){
+                final ToggleButton favoriteIcon = (ToggleButton)findViewById(
+                        R.id.img_button);
+                favoriteIcon.isChecked();
+                cursor.close();
+                return false;
+            }else {
+                cursor.close();
+                return true;
+            }
+        }
+
+    private void excuteTrailer() {
         FetchTrailer fetchTrailer = new FetchTrailer();
         fetchTrailer.execute();
     }
-    private class FetchTrailer extends AsyncTask<String, Void, String>{
-//        Intent intent = getIntent();
-        //Poster currentMovie = intent.getParcelableExtra("results");
-        //int movieId = currentMovie.getExtra("id").;
+
+    private class FetchTrailer extends AsyncTask<String, Void, String> {
         int mid = getIntent().getExtras().getInt("id");
         String idString = String.valueOf(mid);
-//        String idString = intent.getStringExtra();
 
-        private void getJsonData(String json)throws JSONException{
+        private void getJsonData(String json) throws JSONException {
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             final String youtubeURL = "https://www.youtube.com/watch?v=";
-            for (int i = 0; i<jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
-                if (object.getString("site").contentEquals("YouTube")){
+                if (object.getString("site").contentEquals("YouTube")) {
                     trailerListkey.add(i, object.getString("key"));
                     trailerName.add(i, object.getString("name"));
                 }
-                Log.i("DetailActivity: ", "URL for youtube = "+ youtubeURL
+                Log.i("In fetchTrailer: ", "URL for youtube = " + youtubeURL
                         + trailerListkey.get(i));
-                Log.i("DetailActivity: ", "Trailer name: "+ trailerName.get(i));
+                Log.i("In fetchTrailer: ", "Trailer name: " + trailerName.get(i));
             }
         }
 
@@ -156,15 +183,15 @@ public class DetailActivity extends Activity {
             HttpURLConnection httpUrlConnection = null;
             BufferedReader bufferReader = null;
             String dataString = null;
-            try{
+            try {
                 final String URL_BASE = "http://api.themoviedb.org/3/movie/"
-            + idString + "/videos";
+                        + idString + "/videos";
                 Uri uri = Uri.parse(URL_BASE).buildUpon().appendQueryParameter(
                         "api_key", API_KEY).build();
                 URL url = new URL(uri.toString());
-                Log.i("DetailActivity", "trailer url: "+ url);
+                Log.i("Detail:doInbackground", "trailer url: " + url);
 
-            httpUrlConnection = (HttpURLConnection)url.openConnection();
+                httpUrlConnection = (HttpURLConnection) url.openConnection();
                 httpUrlConnection.setRequestMethod("GET");
                 httpUrlConnection.connect();
                 InputStream inputStream = httpUrlConnection.getInputStream();
@@ -175,7 +202,7 @@ public class DetailActivity extends Activity {
                 bufferReader = new BufferedReader(new InputStreamReader(
                         inputStream));
                 String string;
-                while ((string = bufferReader.readLine()) != null){
+                while ((string = bufferReader.readLine()) != null) {
                     stringBuilder.append(string).append("\n");
                 }
                 dataString = stringBuilder.toString();
@@ -195,20 +222,92 @@ public class DetailActivity extends Activity {
         protected void onPostExecute(String s) {
             final ArrayList<Trailer> trailerArrayList = new ArrayList<>();
             final String youtubeUrl = "https://www.youtube.com/watch?v=";
-            for (int i=0; i<trailerListkey.size(); i++){
+            for (int i = 0; i < trailerListkey.size(); i++) {
                 Trailer trailer = new Trailer();
                 trailer.key = trailerListkey.get(i);
                 trailer.name = trailerName.get(i);
                 trailerArrayList.add(trailer);
             }
-            Log.i("Detail PostExecute ","traler url: " +
+            Log.i("Detail onPostExecute ", "trailer url: " +
                     youtubeUrl + trailerListkey);
-            Log.i("Detail PostExecute ","traler name: " +
+            Log.i("Detail onPostExecute ", "trailer name: " +
                     trailerName);
-            RecyclerView recyclerView=(RecyclerView)findViewById(R.id.trailerrecyclerview);
+            RecyclerView recyclerView =
+                    (RecyclerView) findViewById(R.id.trailerrecyclerview);
             final TrailerAdapter trailerAdapter = new TrailerAdapter(
-                    getApplicationContext(), trailerArrayList);
+//                    getApplicationContext() -- this makes crush
+                    DetailActivity.this, trailerArrayList);
             recyclerView.setAdapter(trailerAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(
+                    DetailActivity.this));
         }
+    }
+    private class FetchReview extends AsyncTask<String, Void, String>{
+        int mIdReview = getIntent().getExtras().getInt("id");
+        String stringIdReview = String.valueOf(mIdReview);
+        private void getJsonDataRreview(String json)throws JSONException{
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
+            for (int i=0; i<jsonArray.length(); i++){
+                JSONObject object = jsonArray.getJSONObject(i);
+                reviewList.add(i, object.getString("content"));
+                Log.i("IN Review", reviewList.get(i));
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection httpURLConnection;
+            BufferedReader bufferedReader;
+            String dataString;
+            try {
+                String URL_BASE_REVIEW = URL_BASE + stringIdReview + "/reviews";
+                Uri uri = Uri.parse(URL_BASE_REVIEW).buildUpon().appendQueryParameter(
+                        "api_key", API_KEY).build();
+                URL url = new URL(uri.toString());
+                Log.i("review URL: ", String.valueOf(url));
+                httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.connect();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                StringBuilder stringBuilder = new StringBuilder();
+                if (inputStream == null){return  null;}
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String string;
+                while ((string = bufferedReader.readLine()) != null){
+                    stringBuilder.append(string).append("\n");
+                }
+                dataString = stringBuilder.toString();
+                getJsonDataRreview(dataString);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            final ArrayList<Review> reviewsArrayList = new ArrayList<>();
+            for (int i=0; i<reviewList.size(); i++){
+                Review review = new Review();
+                review.content = reviewList.get(i);
+                reviewsArrayList.add(review);
+            }
+            RecyclerView recyclerView = (RecyclerView)findViewById(R.id.review_recyclerview);
+            final ReviewAdapter reviewAdapter = new ReviewAdapter(
+                    getApplicationContext(), reviewsArrayList);
+            recyclerView.setAdapter(reviewAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(
+                    DetailActivity.this));
+        }
+    }
+    private void excuteReviews() {
+        FetchReview fetchreview = new FetchReview();
+        fetchreview.execute();
     }
 }

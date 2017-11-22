@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
@@ -19,20 +18,20 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/poster"
             android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
-                    android:text="Title: " />
+                    android:text="Title: "
+                    android:textColor="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/title"
@@ -53,7 +52,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
-                    android:text="Release date" />
+                    android:text="Release date"
+                    android:textColor="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/date"
@@ -73,29 +73,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
-                    android:text="Average Rating" />
+                    android:text="Average Rating"
+                    android:textColor="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/rating"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="10dp"
-                    tools:text="5" />
+                    tools:text="10" />
             </LinearLayout>
 
             <ToggleButton
                 android:id="@+id/img_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:elevation="1dp"
-                android:background="@drawable/selector"
-                android:textOff=""
-                android:textOn=""
                 android:layout_gravity="center_vertical"
-                android:paddingBottom="5dp"/>
+                android:background="@drawable/selector"
+                android:elevation="1dp"
+                android:paddingBottom="5dp"
+                android:textOff=""
+                android:textOn="" />
 
-                <!--android:background="@drawable/selector"/>-->
-                <!--android:src="@android:drawable/btn_star_big_off" />-->
+            <!--android:background="@drawable/selector"/>-->
+            <!--android:src="@android:drawable/btn_star_big_off" />-->
             <!--android:backgroundTint="#00000000"-->
         </LinearLayout>
 
@@ -106,19 +107,46 @@
             android:layout_below="@id/poster"
             android:paddingBottom="5dp"
             android:paddingTop="10dp"
-            android:text="Overview" />
+            android:text="Overview"
+            android:textColor="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/summery"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_below="@id/tv_summery_title"
-            android:paddingTop="10dp"
+            android:paddingTop="5dp"
             tools:text="movoie over view" />
+
+        <TextView
+            android:id="@+id/trailer_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/summery"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Trailers"
+            android:textColor="@color/colorPrimary" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/trailerrecyclerview"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/trailer_title" />
+
+        <TextView
+            android:id="@+id/review_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/summery"/>
+            android:layout_below="@id/trailerrecyclerview"
+            android:padding="5dp"
+            android:text="Reviews"
+            android:textColor="@color/colorPrimary" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/review_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/review_title" />
     </RelativeLayout>
 </ScrollView>
