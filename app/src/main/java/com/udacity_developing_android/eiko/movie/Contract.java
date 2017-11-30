@@ -21,7 +21,7 @@ public class Contract {
     public static final class Entry implements BaseColumns{
        public static final Uri CONTENT_URI =
                Uri.withAppendedPath(BASE_URI, PATH);
-        public static String TABLE_NAME = "favorite";
+        public static String TABLE_NAME = "favoritelist";
         public static String COLUMN_MOVIE_ID = BaseColumns._ID;
         public static String COLUMN_TITLE = "title";
         public static String COLUMN_POSTER = "poster";
@@ -29,7 +29,7 @@ public class Contract {
         public static String COLUMN_RATING = "rating";
         public static String COLUMN_RELEASEDATE = "releasedate";
 
-        public static Uri buildMovieUri(int id){
+        public static Uri buildMovieUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
         public static String CONTENT_LIST = ContentResolver.

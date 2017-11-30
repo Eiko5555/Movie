@@ -10,7 +10,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.GridView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +34,13 @@ public class Favorite extends AppCompatActivity
         getSupportLoaderManager().initLoader(CURSOR_ID, null, this);
     }
 
-//    @Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportLoaderManager().restartLoader(
+                CURSOR_ID, null, this);
+    }
+    //    @Override
 //    protected void onSaveInstanceState(Bundle outState) {
 //        outState.putParcelableArrayList("favoriteList",
 //                (ArrayList));
@@ -53,7 +58,8 @@ public class Favorite extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.v("Favorite", "onCreateLoader");
-        return new CursorLoader(this, favoriteUri, projection,null,null,null);
+        return new CursorLoader(this, favoriteUri, projection,
+                null,null,null);
     }
 
     @Override

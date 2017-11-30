@@ -54,7 +54,6 @@ public class DetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailview);
 //        Poster currentMovie = this.getIntent().getParcelableExtra("result");
-
         imageview = (ImageView) findViewById(R.id.poster);
         tv_title = (TextView) findViewById(R.id.title);
         tv_releasedate = (TextView) findViewById(R.id.date);
@@ -74,7 +73,9 @@ public class DetailActivity extends Activity {
                     Log.v("Detail", "favorite clicked");
                     Toast.makeText(DetailActivity.this,
                             "Saved to Favorite", Toast.LENGTH_LONG).show();
+                    favoriteButton.setChecked(true);
                     saveFavorite();
+
                 } else {
                     Log.v("Detail", "favorite removed");
                     Toast.makeText(DetailActivity.this,
@@ -94,16 +95,31 @@ public class DetailActivity extends Activity {
         this.excuteTrailer();
         this.excuteReviews();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     public void saveFavorite(){
-        Intent intent = getIntent();
-        Poster movie = intent.getParcelableExtra("id");
-        int idmovie = movie.getId();
-//        String mid = String.valueOf(idmovie);
-        String mTitle = movie.getTitle();
-        String mPoster = movie.getImage();
-        String mOverview = movie.getOverview();
-        String mRating = movie.getVoteAverage();
-        String mReleaseDate = movie.getReleaseDate();
+        favorite();
+        int theid = getIntent().getExtras().getInt("id");
+        String idmovie = String.valueOf(theid);
+        String mTitle = getIntent().getExtras().getString("title");
+        String mPoster = getIntent().getExtras().getString("poster_path");
+        String mOverview = getIntent().getExtras().getString("overview");
+        String mReleaseDate = getIntent().getExtras().getString("release_date");
+        String mRating = getIntent().getExtras().getString("vote_average");
+        //        Intent intent = getIntent();
+//        Poster movie = (Poster)intent.getParcelableExtra("results");
+//        int idmovie = movie.getId();
+////        String mid = String.valueOf(idmovie);
+//        String mTitle = movie.getTitle();
+//        String mPoster = movie.getImage();
+//        String mOverview = movie.getOverview();
+//        String mRating = movie.getVoteAverage();
+//        String mReleaseDate = movie.getReleaseDate();
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, idmovie);
         contentValues.put(Contract.Entry.COLUMN_TITLE, mTitle);
@@ -115,6 +131,7 @@ public class DetailActivity extends Activity {
                 Contract.Entry.CONTENT_URI, contentValues);
         Log.i("savefavorite", String.valueOf(savefavUri));
         Toast.makeText(this, "Saved to favorite",Toast.LENGTH_LONG).show();
+//        favorite();
     }
 //    public void deleteFavorite(){
 //        Uri favorite = Contract.Entry.CONTENT_URI;
@@ -132,15 +149,18 @@ public class DetailActivity extends Activity {
 //        finish();
 //        }
         public boolean favorite(){
-            Intent intent = getIntent();
-            Poster current = intent.getParcelableExtra("results");
-            String title = current.getTitle();
-            int id = current.getId();
-            Log.i("Detail: favorite", title);
+//            Intent intent = getIntent();
+//            Poster current = intent.getParcelableExtra("results");
+//            String title = current.getTitle();
+            int id = getIntent().getExtras().getInt("id");
+            Log.i("Detail: favorite", String.valueOf(id));
             Cursor cursor = getContentResolver().query(
                     Contract.Entry.buildMovieUri(id),null,null,null,null);
-            assert  cursor != null;
-            if(cursor.moveToNext()){
+            if (cursor != null && cursor.getCount()>0) {
+                cursor.moveToFirst();
+            }
+            else if(cursor != null){
+                cursor.moveToNext();
                 final ToggleButton favoriteIcon = (ToggleButton)findViewById(
                         R.id.img_button);
                 favoriteIcon.isChecked();
@@ -150,6 +170,7 @@ public class DetailActivity extends Activity {
                 cursor.close();
                 return true;
             }
+            return false;
         }
 
     private void excuteTrailer() {

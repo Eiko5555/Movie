@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.udacity_developing_android.eiko.movie">
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,11 +13,14 @@
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity" />
+        <activity android:name=".Favorite"/>
+        <provider
+            android:authorities="com.udacity_developing_android.eiko.movie"
+            android:name="com.udacity_developing_android.eiko.movie.ContentProvider"
+            android:exported="false"/>
     </application>
-
 </manifest>
