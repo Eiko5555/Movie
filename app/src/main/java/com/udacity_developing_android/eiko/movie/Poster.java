@@ -14,6 +14,7 @@ public class Poster implements Parcelable {
                 public Poster createFromParcel(Parcel in) {
                     return new Poster(in);
                 }
+
                 @Override
                 public Poster[] newArray(int size) {
                     return new Poster[size];

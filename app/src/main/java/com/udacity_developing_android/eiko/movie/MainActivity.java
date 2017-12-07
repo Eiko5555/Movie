@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.image_grid, mGridImage);
         gridview.setAdapter(mImageAdapter);
         new AsyncHttpTask().execute();
-
         gridview.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sort_favorite:
                 Intent intent = new Intent(MainActivity.this, Favorite.class);
                 startActivity(intent);
-                Toast.makeText(getApplicationContext(), "Your Favorite",
+                Toast.makeText(getApplicationContext(), "Your Favorite List",
                         Toast.LENGTH_LONG).show();
                 return true;
             default:
@@ -110,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-        public String API_KEY = "KEYS";
+                public String API_KEY = "KEYS";
+
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
         String VIDEO = "videos";

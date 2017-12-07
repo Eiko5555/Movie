@@ -9,31 +9,37 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by eiko on 11/13/2017.
  */
 
-public class ContentProvider extends android.content.ContentProvider{
-    public static String favoritemovieId =
-            Contract.Entry.COLUMN_MOVIE_ID + " = ? ";
-    private DbHelper mDpHelper;
-    static int FAVORITE = 1;
-    static int FAVORITE_ID = 101;
+public class ContentProvider extends android.content.ContentProvider {
     public static final UriMatcher uriMatcher =
             new UriMatcher(UriMatcher.NO_MATCH);
+    public static String favoritemovieId =
+            Contract.Entry.COLUMN_MOVIE_ID + " = ? ";
+    static int FAVORITE = 100;
+    static int FAVORITE_ID = 101;
+
     static {
         uriMatcher.addURI(Contract.CONTENT_AUTHORITY,
                 Contract.PATH, FAVORITE);
         uriMatcher.addURI(Contract.CONTENT_AUTHORITY,
                 Contract.PATH + "/#", FAVORITE_ID);
     }
+
+    private DbHelper mDpHelper;
+
     @Override
     public boolean onCreate() {
         mDpHelper = new DbHelper(getContext());
+
         return true;
     }
-    public Cursor getAll(){
+
+    public Cursor getAll() {
         return mDpHelper.getReadableDatabase().query(
                 Contract.Entry.TABLE_NAME, null, null, null,
                 null, null, null);
@@ -47,16 +53,20 @@ public class ContentProvider extends android.content.ContentProvider{
                         @Nullable String sortOrder) {
         SQLiteDatabase db = mDpHelper.getReadableDatabase();
         Cursor c = null;
+
         int urimatcher = uriMatcher.match(uri);
-        if (urimatcher == FAVORITE){
-                c = db.query(Contract.Entry.TABLE_NAME, projection,
-                        selection,selectionArgs,null,null, sortOrder);
-        }else if (urimatcher == FAVORITE_ID){
-            selection = Contract.Entry._ID + "= ?";
+        if (urimatcher == FAVORITE) {
+            c = db.query(Contract.Entry.TABLE_NAME, projection,
+                    selection, selectionArgs, null, null, sortOrder);
+        } else if (urimatcher == FAVORITE_ID) {
+            selection = Contract.Entry._ID + "=?";
             selectionArgs = new String[]
                     {String.valueOf(ContentUris.parseId(uri))};
             c = db.query(Contract.Entry.TABLE_NAME, projection, selection,
                     selectionArgs, null, null, sortOrder);
+        }
+        if (c.getCount() < 0) {
+            Log.v("Content", "cursor is empty");
         }
         return c;
     }
@@ -65,9 +75,9 @@ public class ContentProvider extends android.content.ContentProvider{
     @Override
     public String getType(@NonNull Uri uri) {
         final int match = uriMatcher.match(uri);
-        if(match == FAVORITE){
+        if (match == FAVORITE) {
             return Contract.Entry.CONTENT_LIST;
-        }else if (match == FAVORITE_ID){
+        } else if (match == FAVORITE_ID) {
             return Contract.Entry.CONTENT_ITEM;
         }
         return null;
@@ -82,10 +92,14 @@ public class ContentProvider extends android.content.ContentProvider{
         }
         return null;
     }
-    public Uri insertFavorite(Uri uri, ContentValues values){
+
+    public Uri insertFavorite(Uri uri, ContentValues values) {
         Log.v("ContentProvider", "insert START");
         SQLiteDatabase db = mDpHelper.getWritableDatabase();
+
         long id = db.insert(Contract.Entry.TABLE_NAME, null, values);
+        if (id > 0)
+            uri = Contract.Entry.buildMovieUri(id);
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
     }
@@ -95,12 +109,12 @@ public class ContentProvider extends android.content.ContentProvider{
                       @Nullable String[] selectionArgs) {
         SQLiteDatabase db = mDpHelper.getWritableDatabase();
         getContext().getContentResolver().notifyChange(uri, null);
-       final int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         int deletedOne = 0;
-        if (match == FAVORITE){
+        if (match == FAVORITE) {
             deletedOne = db.delete(Contract.Entry.TABLE_NAME, selection
-            , selectionArgs);
-        }else if (match == FAVORITE_ID){
+                    , selectionArgs);
+        } else if (match == FAVORITE_ID) {
             selection = Contract.Entry._ID + "= ?";
             selectionArgs = new String[]{
                     String.valueOf(ContentUris.parseId(uri))};
@@ -114,9 +128,9 @@ public class ContentProvider extends android.content.ContentProvider{
     public int update(@NonNull Uri uri, @Nullable ContentValues values,
                       @Nullable String selection, @Nullable String[] selectionArgs) {
         final int match = uriMatcher.match(uri);
-        if (match == FAVORITE){
+        if (match == FAVORITE) {
             return updateFavorite(uri, values, selection, selectionArgs);
-        }else if (match == FAVORITE_ID){
+        } else if (match == FAVORITE_ID) {
             selection = Contract.Entry._ID + "= ?";
             selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
             return updateFavorite(uri, values, selection, selectionArgs);
@@ -127,11 +141,13 @@ public class ContentProvider extends android.content.ContentProvider{
     private int updateFavorite(Uri uri, ContentValues values,
                                String selection, String[] selectionArgs) {
 
-        if (values.size() == 0){ return  0;}
+        if (values.size() == 0) {
+            return 0;
+        }
         SQLiteDatabase db = mDpHelper.getWritableDatabase();
         int rowUpdate = db.update(Contract.Entry.TABLE_NAME, values,
                 selection, selectionArgs);
-        if (rowUpdate !=0){
+        if (rowUpdate != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowUpdate;

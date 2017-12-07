@@ -10,6 +10,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.GridView;
+import android.widget.ListView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,19 +20,27 @@ import java.util.List;
  */
 
 public class Favorite extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>{
-    private Uri favoriteUri = Contract.Entry.CONTENT_URI;
+        implements LoaderManager.LoaderCallbacks<Cursor> {
     static final int CURSOR_ID = 2;
-    private FavoriteAdapter mFavoriteAdapter;
     List<Poster> movie = new ArrayList<>();
+    String[] projection = new String[]{
+            Contract.Entry._ID,
+            Contract.Entry.COLUMN_TITLE,
+            Contract.Entry.COLUMN_POSTER,
+            Contract.Entry.COLUMN_OVERVIEW,
+            Contract.Entry.COLUMN_RATING,
+            Contract.Entry.COLUMN_RELEASEDATE
+    };
+    private Uri favoriteUri = Contract.Entry.CONTENT_URI;
+    private FavoriteAdapter mFavoriteAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gridview);
+        setContentView(R.layout.favorite_listview);
         mFavoriteAdapter = new FavoriteAdapter(this, null);
-        GridView gridView = (GridView)findViewById(R.id.gridview);
-        gridView.setAdapter(mFavoriteAdapter);
+        ListView listView = (ListView) findViewById(R.id.favorite_listview);
+        listView.setAdapter(mFavoriteAdapter);
         getSupportLoaderManager().initLoader(CURSOR_ID, null, this);
     }
 
@@ -40,26 +50,12 @@ public class Favorite extends AppCompatActivity
         getSupportLoaderManager().restartLoader(
                 CURSOR_ID, null, this);
     }
-    //    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        outState.putParcelableArrayList("favoriteList",
-//                (ArrayList));
-//        super.onSaveInstanceState(outState);
-//    }
-
-    String[] projection = new String[]{
-            Contract.Entry.COLUMN_TITLE,
-            Contract.Entry.COLUMN_POSTER,
-            Contract.Entry.COLUMN_OVERVIEW,
-            Contract.Entry.COLUMN_RATING,
-            Contract.Entry.COLUMN_RELEASEDATE
-    };
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.v("Favorite", "onCreateLoader");
         return new CursorLoader(this, favoriteUri, projection,
-                null,null,null);
+                null, null, null);
     }
 
     @Override

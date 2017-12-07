@@ -16,11 +16,12 @@ public class Contract {
             "content://" + CONTENT_AUTHORITY);
     public static final String PATH = "favorite";
 
-    private Contract(){}
+    private Contract() {
+    }
 
-    public static final class Entry implements BaseColumns{
-       public static final Uri CONTENT_URI =
-               Uri.withAppendedPath(BASE_URI, PATH);
+    public static final class Entry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                Uri.withAppendedPath(BASE_URI, PATH);
         public static String TABLE_NAME = "favoritelist";
         public static String COLUMN_MOVIE_ID = BaseColumns._ID;
         public static String COLUMN_TITLE = "title";
@@ -28,13 +29,13 @@ public class Contract {
         public static String COLUMN_OVERVIEW = "overview";
         public static String COLUMN_RATING = "rating";
         public static String COLUMN_RELEASEDATE = "releasedate";
-
-        public static Uri buildMovieUri(long id){
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
         public static String CONTENT_LIST = ContentResolver.
                 CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH;
         public static String CONTENT_ITEM = ContentResolver.
                 CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH;
+
+        public static Uri buildMovieUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 }
