@@ -11,6 +11,7 @@ import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class DetailActivity extends Activity {
     private List<String> reviewList = new ArrayList<>();
         private String API_KEY = "KEYS";
     private String URL_BASE = "http://api.themoviedb.org/3/movie/";
+    ContentValues contentValues = new ContentValues();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class DetailActivity extends Activity {
         tv_rate = (TextView) findViewById(R.id.rating);
         tv_summery = (TextView) findViewById(R.id.summery);
         favoriteButton = (ToggleButton) findViewById(R.id.img_button);
+        favorite();
 
         tv_title.setText(getIntent().getExtras().getString("title"));
         tv_releasedate.setText(getIntent().getExtras().getString("release_date"));
@@ -90,7 +93,6 @@ public class DetailActivity extends Activity {
 //                    SharedPreferences.Editor editor = preferences.edit();
 //                    editor.putBoolean("onOff", false);
 //                    editor.commit();
-
                 }
             }
         });
@@ -113,7 +115,6 @@ public class DetailActivity extends Activity {
     }
 
     public void saveFavorite() {
-//        favorite();
         int theid = getIntent().getExtras().getInt("id");
         String idmovie = String.valueOf(theid);
         String mTitle = getIntent().getExtras().getString("title");
@@ -131,41 +132,65 @@ public class DetailActivity extends Activity {
 //        String mRating = movie.getVoteAverage();
 //        String mReleaseDate = movie.getReleaseDate();
 
-        ContentValues contentValues = new ContentValues();
+//        ContentValues contentValues = new ContentValues();
         contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, idmovie);
         contentValues.put(Contract.Entry.COLUMN_TITLE, mTitle);
         contentValues.put(Contract.Entry.COLUMN_POSTER, mPoster);
         contentValues.put(Contract.Entry.COLUMN_OVERVIEW, mOverview);
         contentValues.put(Contract.Entry.COLUMN_RATING, mRating);
         contentValues.put(Contract.Entry.COLUMN_RELEASEDATE, mReleaseDate);
+        Log.v("insert id", idmovie);
         if (contentValues != null && contentValues.size()!=0) {
-            Uri savefavUri = getContentResolver().insert(
-                    Contract.Entry.CONTENT_URI, contentValues);
-            Log.i("Detail,saveFavorite()", String.valueOf(savefavUri));
+            String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
+            String[] projectionExists = {Contract.Entry.COLUMN_TITLE};
+            String[] selectionArgsExists = {idmovie.toString()};
+            Cursor cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
+                    projectionExists, selectionExists, selectionArgsExists, null);
+//            favoriteButton.setChecked(true);
+            if(cursor.getCount()<=0){
+                Uri savefavUri = getContentResolver().insert(
+                        Contract.Entry.CONTENT_URI, contentValues);
+                Log.i("Detail,saveFavorite()", String.valueOf(savefavUri));
+            }
         }
         Toast.makeText(this, "Saving....", Toast.LENGTH_LONG).show();
-        favorite();
     }
 
     public boolean favorite() {
 //            Intent intent = getIntent();
 //            Poster current = intent.getParcelableExtra("results");
 //            String title = current.getTitle();
+//        if (contentValues != null && contentValues.size()!=0) {
+//            String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
+//            String[] projectionExists = {Contract.Entry.COLUMN_TITLE};
+//            String[] selectionArgsExists = {idmovie.toString()};
+//            Cursor cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
+//                    projectionExists, selectionExists, selectionArgsExists, null);
+//            favoriteButton.setChecked(true);
         int id = getIntent().getExtras().getInt("id");
         String title = getIntent().getStringExtra("title");
+        String selection = Contract.Entry.COLUMN_MOVIE_ID + "=?";
+        String[] projection = {Contract.Entry.COLUMN_TITLE};
+        String[] selectionArgs = {String.valueOf(id)};
         Log.i("Detail: favorite table", title);
-        Cursor cursor = getContentResolver().query(
-                Contract.Entry.buildMovieUri(id), null, null, null, null);
+        Cursor cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
+                projection, selection, selectionArgs, null);
+        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, String.valueOf(id));
+        if (contentValues != null && contentValues.size()!=0){
+        favoriteButton.setChecked(true);}
+//        Cursor cursor = getContentResolver().query(
+//                Contract.Entry.buildMovieUri(id), null, null, null, null);
 //            cursor.moveToFirst();
 //            if (cursor != null && cursor.getCount()>0) {
+
         assert cursor != null;
         if (cursor.moveToNext()) {
 //            cursor.moveToNext();
             Log.v("favorite() cursor", String.valueOf(cursor.getCount()));
             Log.v("Status","Alredy in a favorite list");
-            ToggleButton toggleButton = (ToggleButton)findViewById
-                    (R.id.img_button);
-            toggleButton.isChecked();
+//            ToggleButton toggleButton = (ToggleButton)findViewById
+//                    (R.id.img_button);
+//            toggleButton.isChecked();
             cursor.close();
             return true;
         } else {
