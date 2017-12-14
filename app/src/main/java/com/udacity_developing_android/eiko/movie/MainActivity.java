@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("overview", current.getOverview());
                         intent.putExtra("id", current.getId());
                         startActivity(intent);
-                        Log.v("MainActivity", "poster clicked");
+//                        Log.v("MainActivity", "poster clicked");
                     }
                 });
     }
@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-                public String API_KEY = "KEYS";
+                public String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
+//                        "KEYS";
 
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 String makeUrl = uri.toString();
-                Log.v("MainActivity", makeUrl);
+//                Log.v("MainActivity", makeUrl);
                 URL url = new URL(makeUrl);
                 urlConnect = (HttpURLConnection) url.openConnection();
                 urlConnect.setRequestMethod("GET");
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 String line;
                 while ((line = buffReader.readLine()) != null) {
                     sb.append(line + "\n");
-                    Log.v("line ", line);
+//                    Log.v("line ", line);
                 }
                 if (sb.length() == 0) {
                     return null;
@@ -177,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 return catchingData(result);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.v("catchingData", "JSON exception", e);
+//                Log.v("catchingData", "JSON exception", e);
                 return null;
             }
         }
@@ -204,12 +205,12 @@ public class MainActivity extends AppCompatActivity {
                 int id = getJSon.getInt(ID);
                 String poster_path = getJSon.getString(POSTER_PATH);
                 String poster_url = IMAGE_PATH + poster_path;
-                Log.v("MainActivity", poster_url);
+//                Log.v("MainActivity", poster_url);
                 movieArray[i] = new Poster(title,
                         releasedate, rate, overview,
                         poster_url, id);
             }
-            Log.v("Mainactivity", String.valueOf(movieArray));
+//            Log.v("Mainactivity", String.valueOf(movieArray));
             return movieArray;
         }
 

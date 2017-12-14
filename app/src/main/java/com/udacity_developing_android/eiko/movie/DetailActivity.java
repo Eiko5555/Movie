@@ -2,16 +2,10 @@ package com.udacity_developing_android.eiko.movie;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,27 +36,29 @@ import java.util.List;
  */
 
 public class DetailActivity extends Activity {
+    ContentValues contentValues = new ContentValues();
     private ImageView imageview;
     private TextView tv_title, tv_releasedate, tv_rate, tv_summery;
     private ToggleButton favoriteButton;
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
     private List<String> reviewList = new ArrayList<>();
-        private String API_KEY = "KEYS";
+    private String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
+    //                "KEYS";
     private String URL_BASE = "http://api.themoviedb.org/3/movie/";
-    ContentValues contentValues = new ContentValues();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailview);
-//        Poster currentMovie = this.getIntent().getParcelableExtra("result");
+
         imageview = (ImageView) findViewById(R.id.poster);
         tv_title = (TextView) findViewById(R.id.title);
         tv_releasedate = (TextView) findViewById(R.id.date);
         tv_rate = (TextView) findViewById(R.id.rating);
         tv_summery = (TextView) findViewById(R.id.summery);
         favoriteButton = (ToggleButton) findViewById(R.id.img_button);
+
         favorite();
 
         tv_title.setText(getIntent().getExtras().getString("title"));
@@ -78,21 +74,15 @@ public class DetailActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Log.v("Detail", " favorite clicked");
+//                    Log.v("Detail", " favorite clicked");
                     Toast.makeText(DetailActivity.this,
                             "Saved to Favorite", Toast.LENGTH_LONG).show();
                     saveFavorite();
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    editor.putBoolean("onOff", true);
-//                    editor.commit();
                 } else {
-                    Log.v("Detail", " favorite removed");
+//                    Log.v("Detail", " favorite removed");
                     Toast.makeText(DetailActivity.this,
                             "Remed from Favorite", Toast.LENGTH_LONG).show();
 //                    deleteFavorite();
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    editor.putBoolean("onOff", false);
-//                    editor.commit();
                 }
             }
         });
@@ -102,9 +92,9 @@ public class DetailActivity extends Activity {
         Picasso.with(this).load(image).into(imageview);
 
         int currentId = getIntent().getExtras().getInt("id");
-        Log.i("Detail onCreate", ",ID" + currentId);
+//        Log.i("Detail onCreate", ",ID" + currentId);
         String currentMovieId = String.valueOf(currentId);
-        Log.i("Detail onCreate", ", movie ID" + currentMovieId);
+//        Log.i("Detail onCreate", ", movie ID" + currentMovieId);
         this.excuteTrailer();
         this.excuteReviews();
     }
@@ -140,57 +130,41 @@ public class DetailActivity extends Activity {
         contentValues.put(Contract.Entry.COLUMN_RATING, mRating);
         contentValues.put(Contract.Entry.COLUMN_RELEASEDATE, mReleaseDate);
         Log.v("insert id", idmovie);
-        if (contentValues != null && contentValues.size()!=0) {
+        if (contentValues != null && contentValues.size() != 0) {
             String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
             String[] projectionExists = {Contract.Entry.COLUMN_TITLE};
             String[] selectionArgsExists = {idmovie.toString()};
             Cursor cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
                     projectionExists, selectionExists, selectionArgsExists, null);
-//            favoriteButton.setChecked(true);
-            if(cursor.getCount()<=0){
+            if (cursor.getCount() <= 0) {
                 Uri savefavUri = getContentResolver().insert(
                         Contract.Entry.CONTENT_URI, contentValues);
                 Log.i("Detail,saveFavorite()", String.valueOf(savefavUri));
             }
         }
-        Toast.makeText(this, "Saving....", Toast.LENGTH_LONG).show();
     }
 
     public boolean favorite() {
 //            Intent intent = getIntent();
 //            Poster current = intent.getParcelableExtra("results");
 //            String title = current.getTitle();
-//        if (contentValues != null && contentValues.size()!=0) {
-//            String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
-//            String[] projectionExists = {Contract.Entry.COLUMN_TITLE};
-//            String[] selectionArgsExists = {idmovie.toString()};
-//            Cursor cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
-//                    projectionExists, selectionExists, selectionArgsExists, null);
-//            favoriteButton.setChecked(true);
-        int id = getIntent().getExtras().getInt("id");
-        String title = getIntent().getStringExtra("title");
-        String selection = Contract.Entry.COLUMN_MOVIE_ID + "=?";
-        String[] projection = {Contract.Entry.COLUMN_TITLE};
-        String[] selectionArgs = {String.valueOf(id)};
-        Log.i("Detail: favorite table", title);
-        Cursor cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
-                projection, selection, selectionArgs, null);
-        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, String.valueOf(id));
-        if (contentValues != null && contentValues.size()!=0){
-        favoriteButton.setChecked(true);}
-//        Cursor cursor = getContentResolver().query(
-//                Contract.Entry.buildMovieUri(id), null, null, null, null);
-//            cursor.moveToFirst();
-//            if (cursor != null && cursor.getCount()>0) {
 
-        assert cursor != null;
+        Cursor cursor = null;
+        int id = getIntent().getExtras().getInt("id");
+        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, String.valueOf(id));
+        if (contentValues != null && contentValues.size() != 0) {
+            String title = getIntent().getStringExtra("title");
+            String selection = Contract.Entry.COLUMN_MOVIE_ID + "=?";
+            String[] projection = {Contract.Entry.COLUMN_TITLE};
+            String[] selectionArgs = {String.valueOf(id)};
+//            Log.i("Detail: favorite table", title);
+            cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
+                    projection, selection, selectionArgs, null);
+        }
         if (cursor.moveToNext()) {
-//            cursor.moveToNext();
             Log.v("favorite() cursor", String.valueOf(cursor.getCount()));
-            Log.v("Status","Alredy in a favorite list");
-//            ToggleButton toggleButton = (ToggleButton)findViewById
-//                    (R.id.img_button);
-//            toggleButton.isChecked();
+            Log.v("Status", "Alredy in a favorite list");
+            favoriteButton.setChecked(true);
             cursor.close();
             return true;
         } else {
@@ -223,8 +197,8 @@ public class DetailActivity extends Activity {
                     trailerListkey.add(i, object.getString("key"));
                     trailerName.add(i, object.getString("name"));
                 }
-                Log.i("In fetchTrailer: ", "URL for youtube = " + youtubeURL
-                        + trailerListkey.get(i));
+//                Log.i("In fetchTrailer: ", "URL for youtube = " + youtubeURL
+//                        + trailerListkey.get(i));
                 Log.i("In fetchTrailer: ", "Trailer name: " + trailerName.get(i));
             }
         }
@@ -241,7 +215,7 @@ public class DetailActivity extends Activity {
                 Uri uri = Uri.parse(URL_BASE).buildUpon().appendQueryParameter(
                         "api_key", API_KEY).build();
                 URL url = new URL(uri.toString());
-                Log.i("Detail:doInbackground", " trailer url " + url);
+//                Log.i("Detail:doInbackground", " trailer url " + url);
 
                 httpUrlConnection = (HttpURLConnection) url.openConnection();
                 httpUrlConnection.setRequestMethod("GET");
@@ -280,14 +254,14 @@ public class DetailActivity extends Activity {
                 trailer.name = trailerName.get(i);
                 trailerArrayList.add(trailer);
             }
-            Log.i("Detail onPostExecute ", "trailer url" +
-                    youtubeUrl + trailerListkey);
+//            Log.i("Detail onPostExecute ", "trailer url" +
+//                    youtubeUrl + trailerListkey);
             Log.i("Detail onPostExecute ", "trailer name" +
                     trailerName);
             RecyclerView recyclerView =
                     (RecyclerView) findViewById(R.id.trailerrecyclerview);
             final TrailerAdapter trailerAdapter = new TrailerAdapter(
-//                    getApplicationContext() -- this makes crush
+//                    getApplicationContext() <-- this makes crush
                     DetailActivity.this, trailerArrayList);
             recyclerView.setAdapter(trailerAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(
@@ -314,6 +288,7 @@ public class DetailActivity extends Activity {
             HttpURLConnection httpURLConnection;
             BufferedReader bufferedReader;
             String dataString;
+            Log.v("Review ID ", stringIdReview);
             try {
                 String URL_BASE_REVIEW = URL_BASE + stringIdReview + "/reviews";
                 Uri uri = Uri.parse(URL_BASE_REVIEW).buildUpon().appendQueryParameter(

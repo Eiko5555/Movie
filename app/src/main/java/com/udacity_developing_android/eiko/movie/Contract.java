@@ -16,8 +16,7 @@ public class Contract {
             "content://" + CONTENT_AUTHORITY);
     public static final String PATH = "favorite";
 
-    private Contract() {
-    }
+    private Contract() {    }
 
     public static final class Entry implements BaseColumns {
         public static final Uri CONTENT_URI =

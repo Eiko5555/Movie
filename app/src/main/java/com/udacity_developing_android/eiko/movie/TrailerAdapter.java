@@ -24,7 +24,7 @@ class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHolder> {
     public TrailerAdapter(Context context, List<Trailer> trailerList) {
         this.mContext = context;
         this.trailerList = trailerList;
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @Override
