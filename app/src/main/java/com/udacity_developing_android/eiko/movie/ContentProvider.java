@@ -151,6 +151,9 @@ public class ContentProvider extends android.content.ContentProvider {
 
     private int updateFavorite(Uri uri, ContentValues values,
                                String selection, String[] selectionArgs) {
+        if (values.containsKey(Contract.Entry.COLUMN_TITLE)){
+            values.getAsString(Contract.Entry.COLUMN_TITLE);
+        }
 
         if (values.size() == 0) {
             return 0;

@@ -29,7 +29,10 @@ public class Favorite extends AppCompatActivity
 
     private Uri favoriteUri = Contract.Entry.CONTENT_URI;
     private FavoriteAdapter mFavoriteAdapter;
-
+    List<Poster> movie = new ArrayList<>();
+/*titleFavorite, releasedateFavorite
+                , rateFavorite, overviewFavorite, poster,
+                        idFavoriteINT);*/
     String[] projection = new String[]{
             Contract.Entry._ID,
             Contract.Entry.COLUMN_TITLE,
@@ -52,40 +55,7 @@ public class Favorite extends AppCompatActivity
             textviewLoading.setVisibility(View.INVISIBLE);
         }
         gridView.setAdapter(mFavoriteAdapter);
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.v("favAdater", "saved poster clicked.");
-//                Intent intent = new Intent(Favorite.this, DetailActivity.class);
-//                Poster itemPosition = mFavoriteAdapter.getItem(position);//
-//                intent.putExtra("poster_path", itemPosition.getImage());
-//                intent.putExtra("title", itemPosition.getTitle());
-//                intent.putExtra("release_date", itemPosition.getReleaseDate());
-//                intent.putExtra("vote_average", itemPosition.getVoteAverage());
-//                intent.putExtra("overview", itemPosition.getOverview());
-//                intent.putExtra("id", itemPosition.getId());
 //
-//                int movieid = getIntent().getExtras().getInt("id");
-//                String movieidString = String.valueOf(movieid);
-//                intent.putExtra("id",movieidString);
-//                intent.putExtra("poster_path",
-//                        String.valueOf(getIntent().getStringExtra("poster_path")));
-//                intent.putExtra("title",
-//                        String.valueOf(getIntent().getStringExtra("title")));
-//                intent.putExtra("release_date",
-//                        String.valueOf(getIntent().getStringExtra("release_date")));
-//                intent.putExtra("vote_average",
-//                        String.valueOf(getIntent().getStringExtra("vote_average")));
-//                intent.putExtra("overview",
-//                        String.valueOf(getIntent().getStringExtra("vote_average")));
-//                Poster current = new Poster(titleFavorite, releasedateFavorite
-//                , rateFavorite, overviewFavorite,posterFavorite, idFavoriteINT);
-//                Intent intent = new Intent(context, DetailActivity.class);
-//                Log.v("favAdapt", current.toString());
-//                intent.putExtra("results", current);
-//                startActivity(intent);
-//            }
-//        });
 //        ListView listView = (ListView) findViewById(R.id.favorite_listview);
 //        listView.setAdapter(mFavoriteAdapter);
         getSupportLoaderManager().initLoader(CURSOR_ID, null, this);

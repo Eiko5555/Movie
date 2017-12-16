@@ -71,10 +71,13 @@ public class FavoriteAdapter extends CursorAdapter {
                         titleFavorite, releasedateFavorite
                 , rateFavorite, overviewFavorite, poster,
                         idFavoriteINT);
-                /*public Poster(String title, String releasedate,
-                  String rate, String overview,
-                  String poster_path, int id) {*/
-                Log.v("favorite ", String.valueOf(current));
+
+                Log.v("favorite ", titleFavorite);
+                Log.v("favorite ", releasedateFavorite);
+                Log.v("favorite ", rateFavorite);
+                Log.v("favorite ", overviewFavorite);
+                Log.v("favorite ", poster);
+                Log.v("favorite ", String.valueOf(idFavoriteINT));
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("results", current);
                 mContext.startActivity(intent);

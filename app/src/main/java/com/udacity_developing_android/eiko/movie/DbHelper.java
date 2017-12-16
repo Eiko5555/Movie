@@ -29,13 +29,13 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +
                 Contract.Entry.TABLE_NAME + " (" +
-                Contract.Entry.COLUMN_MOVIE_ID +
-                " INTEGER PRIMARY KEY ON CONFLICT REPLACE, " +
                 Contract.Entry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                Contract.Entry.COLUMN_POSTER + " TEXT NOT NULL, " +
-                Contract.Entry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                Contract.Entry.COLUMN_RELEASEDATE + " TEXT NOT NULL, " +
                 Contract.Entry.COLUMN_RATING + " TEXT NOT NULL, " +
-                Contract.Entry.COLUMN_RELEASEDATE + " TEXT NOT NULL " +
+                Contract.Entry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                Contract.Entry.COLUMN_POSTER + " TEXT NOT NULL, " +
+                Contract.Entry.COLUMN_MOVIE_ID +
+                " INTEGER PRIMARY KEY ON CONFLICT REPLACE " +
                 " );" );
         Log.v("TABLE id name: ", Contract.Entry.COLUMN_MOVIE_ID);
     }
