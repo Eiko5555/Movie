@@ -28,6 +28,7 @@ public class Contract {
         public static String COLUMN_OVERVIEW = "overview";
         public static String COLUMN_RATING = "rating";
         public static String COLUMN_RELEASEDATE = "releasedate";
+        public static String COLUMN_FAVORITE_OR_NOT = "favoriteornot";
         public static String CONTENT_LIST = ContentResolver.
                 CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH;
         public static String CONTENT_ITEM = ContentResolver.

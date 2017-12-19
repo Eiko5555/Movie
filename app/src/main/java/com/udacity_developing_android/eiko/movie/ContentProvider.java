@@ -22,6 +22,8 @@ public class ContentProvider extends android.content.ContentProvider {
 //            Contract.Entry.COLUMN_MOVIE_ID + " = ? ";
     static int FAVORITE = 100;
     static int FAVORITE_ID = 101;
+    public static String FAVORITE_TAG = "Y";
+    public static String NOT_FAVORITE_TAG = "N";
 
     static {
         uriMatcher.addURI(Contract.CONTENT_AUTHORITY,
@@ -123,8 +125,9 @@ public class ContentProvider extends android.content.ContentProvider {
         final int match = uriMatcher.match(uri);
         int deletedOne = 0;
         if (match == FAVORITE) {
+            String[] fselectionArgs = new String[]{NOT_FAVORITE_TAG};
             deletedOne = db.delete(Contract.Entry.TABLE_NAME, selection
-                    , selectionArgs);
+                    , fselectionArgs);
         } else if (match == FAVORITE_ID) {
             selection = Contract.Entry._ID + "= ?";
             selectionArgs = new String[]{

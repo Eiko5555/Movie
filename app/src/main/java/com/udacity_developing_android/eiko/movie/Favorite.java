@@ -39,7 +39,8 @@ public class Favorite extends AppCompatActivity
             Contract.Entry.COLUMN_POSTER,
             Contract.Entry.COLUMN_OVERVIEW,
             Contract.Entry.COLUMN_RATING,
-            Contract.Entry.COLUMN_RELEASEDATE
+            Contract.Entry.COLUMN_RELEASEDATE,
+        Contract.Entry.COLUMN_FAVORITE_OR_NOT
     };
 
     @Override

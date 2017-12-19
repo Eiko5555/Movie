@@ -43,7 +43,8 @@ public class DetailActivity extends Activity {
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
     private List<String> reviewList = new ArrayList<>();
-    private String API_KEY =  "KEYS";
+//    private String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
+                   public String API_KEY = "KEYS";
     private String URL_BASE = "http://api.themoviedb.org/3/movie/";
 
     @Override
@@ -126,6 +127,7 @@ public class DetailActivity extends Activity {
         contentValues.put(Contract.Entry.COLUMN_OVERVIEW, mOverview);
         contentValues.put(Contract.Entry.COLUMN_RATING, mRating);
         contentValues.put(Contract.Entry.COLUMN_RELEASEDATE, mReleaseDate);
+        contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "favoriteornot");
         Log.v("insert id", idmovie);
 //        if (contentValues != null && contentValues.size() != 0) {
             String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
@@ -153,8 +155,8 @@ public class DetailActivity extends Activity {
 
         Cursor cursor = null;
         int id = getIntent().getExtras().getInt("id");
-        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, String.valueOf(id));
-        if (contentValues != null && contentValues.size() != 0) {
+//        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, String.valueOf(id));
+//        if (contentValues != null && contentValues.size() != 0) {
             String title = getIntent().getStringExtra("title");
             String selection = Contract.Entry.COLUMN_MOVIE_ID + "=?";
             String[] projection = {Contract.Entry.COLUMN_TITLE};
@@ -162,11 +164,11 @@ public class DetailActivity extends Activity {
 //            Log.i("Detail: favorite table", title);
             cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
                     projection, selection, selectionArgs, null);
-        }
+//        }
         if (cursor.moveToNext()) {
             Log.v("favorite() cursor", String.valueOf(cursor.getCount()));
             Log.v("Status", "Alredy in a favorite list");
-            favoriteButton.setChecked(true);
+//            favoriteButton.setChecked(true);
             cursor.close();
             return true;
         } else {

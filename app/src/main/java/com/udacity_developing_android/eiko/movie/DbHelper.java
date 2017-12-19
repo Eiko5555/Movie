@@ -34,6 +34,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 Contract.Entry.COLUMN_RATING + " TEXT NOT NULL, " +
                 Contract.Entry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 Contract.Entry.COLUMN_POSTER + " TEXT NOT NULL, " +
+                Contract.Entry.COLUMN_FAVORITE_OR_NOT + " TEXT, " +
                 Contract.Entry.COLUMN_MOVIE_ID +
                 " INTEGER PRIMARY KEY ON CONFLICT REPLACE " +
                 " );" );
