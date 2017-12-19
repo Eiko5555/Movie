@@ -64,13 +64,15 @@ public class FavoriteAdapter extends CursorAdapter {
                 String overviewFavorite = cursor.getString(overview);
                 int releasedate = cursor.getColumnIndex(Contract.Entry.COLUMN_RELEASEDATE);
                 String releasedateFavorite = cursor.getString(releasedate);
+                int  favorite = cursor.getColumnIndex(Contract.Entry.COLUMN_FAVORITE_OR_NOT);
+                String favoriteStatus = cursor.getString(favorite);
 //                int poster_path = cursor.getColumnIndex(Contract.Entry.COLUMN_POSTER);
 //                String posterFavorite = cursor.getString(poster_path);
 
                 Poster current = new Poster(
                         titleFavorite, releasedateFavorite
                 , rateFavorite, overviewFavorite, poster,
-                        idFavoriteINT);
+                        idFavoriteINT, favoriteStatus);
 
                 Log.v("favorite ", titleFavorite);
                 Log.v("favorite ", releasedateFavorite);

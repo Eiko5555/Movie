@@ -109,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-//                public String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
-                        public String API_KEY = "KEYS";
+                public String API_KEY = "KEYS";
 
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
@@ -206,13 +205,16 @@ public class MainActivity extends AppCompatActivity {
                 String poster_path = getJSon.getString(POSTER_PATH);
                 String poster_url = IMAGE_PATH + poster_path;
 //                Log.v("MainActivity", poster_url);
+
+
                 movieArray[i] = new Poster(title,
                         releasedate, rate, overview,
-                        poster_url, id);
+                        poster_url, id, favorite);
             }
 //            Log.v("Mainactivity", String.valueOf(movieArray));
             return movieArray;
         }
+        String favorite;
 
         @Override
         protected void onPostExecute(Poster[] posters) {

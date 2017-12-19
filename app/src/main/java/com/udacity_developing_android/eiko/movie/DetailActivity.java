@@ -43,8 +43,7 @@ public class DetailActivity extends Activity {
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
     private List<String> reviewList = new ArrayList<>();
-//    private String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
-                   public String API_KEY = "KEYS";
+    private String API_KEY = "KEYS";
     private String URL_BASE = "http://api.themoviedb.org/3/movie/";
 
     @Override

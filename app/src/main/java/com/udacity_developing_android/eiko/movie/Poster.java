@@ -20,18 +20,19 @@ public class Poster implements Parcelable {
                     return new Poster[size];
                 }
             };
-    private String poster_path, overview, title, release_date, vote_average;
+    private String poster_path, overview, title, release_date, vote_average, favorite;
     private int id;
 
     public Poster(String title, String releasedate,
                   String rate, String overview,
-                  String poster_path, int id) {
+                  String poster_path, int id, String favoriteStatus) {
         this.title = title;
         this.release_date = releasedate;
         this.vote_average = rate;
         this.overview = overview;
         this.poster_path = poster_path;
         this.id = id;
+        this.favorite = favoriteStatus;
     }
 
     protected Poster(Parcel in) {
