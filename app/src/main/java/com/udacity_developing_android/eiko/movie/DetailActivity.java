@@ -165,6 +165,7 @@ public class DetailActivity extends Activity {
                     projection, selection, selectionArgs, null);
 //        }
         if (cursor.moveToNext()) {
+            cursor.getString(cursor.getColumnIndex(Contract.Entry.COLUMN_FAVORITE_OR_NOT));
             Log.v("favorite() cursor", String.valueOf(cursor.getCount()));
             Log.v("Status", "Alredy in a favorite list");
 //            favoriteButton.setChecked(true);
