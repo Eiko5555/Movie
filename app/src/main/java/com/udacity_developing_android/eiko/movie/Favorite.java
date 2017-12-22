@@ -30,9 +30,8 @@ public class Favorite extends AppCompatActivity
     private Uri favoriteUri = Contract.Entry.CONTENT_URI;
     private FavoriteAdapter mFavoriteAdapter;
     List<Poster> movie = new ArrayList<>();
-/*titleFavorite, releasedateFavorite
-                , rateFavorite, overviewFavorite, poster,
-                        idFavoriteINT);*/
+/*titleFavorite, releasedateFavorite, rateFavorite,
+overviewFavorite, poster, idFavoriteINT);*/
     String[] projection = new String[]{
             Contract.Entry._ID,
             Contract.Entry.COLUMN_TITLE,
@@ -56,7 +55,6 @@ public class Favorite extends AppCompatActivity
             textviewLoading.setVisibility(View.INVISIBLE);
         }
         gridView.setAdapter(mFavoriteAdapter);
-//
 //        ListView listView = (ListView) findViewById(R.id.favorite_listview);
 //        listView.setAdapter(mFavoriteAdapter);
         getSupportLoaderManager().initLoader(CURSOR_ID, null, this);

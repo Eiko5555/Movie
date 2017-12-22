@@ -25,14 +25,14 @@ public class Poster implements Parcelable {
 
     public Poster(String title, String releasedate,
                   String rate, String overview,
-                  String poster_path, int id, String favoriteStatus) {
+                  String poster_path, int id ) {
         this.title = title;
         this.release_date = releasedate;
         this.vote_average = rate;
         this.overview = overview;
         this.poster_path = poster_path;
         this.id = id;
-        this.favorite = favoriteStatus;
+
     }
 
     protected Poster(Parcel in) {

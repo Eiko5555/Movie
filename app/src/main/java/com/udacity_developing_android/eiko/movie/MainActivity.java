@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-                public String API_KEY = "KEYS";
+                public String API_KEY = "API";
 
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
@@ -209,12 +209,11 @@ public class MainActivity extends AppCompatActivity {
 
                 movieArray[i] = new Poster(title,
                         releasedate, rate, overview,
-                        poster_url, id, favorite);
+                        poster_url, id);
             }
 //            Log.v("Mainactivity", String.valueOf(movieArray));
             return movieArray;
         }
-        String favorite;
 
         @Override
         protected void onPostExecute(Poster[] posters) {

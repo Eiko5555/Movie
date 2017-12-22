@@ -64,22 +64,19 @@ public class FavoriteAdapter extends CursorAdapter {
                 String overviewFavorite = cursor.getString(overview);
                 int releasedate = cursor.getColumnIndex(Contract.Entry.COLUMN_RELEASEDATE);
                 String releasedateFavorite = cursor.getString(releasedate);
-                int  favorite = cursor.getColumnIndex(Contract.Entry.COLUMN_FAVORITE_OR_NOT);
-                String favoriteStatus = cursor.getString(favorite);
-//                int poster_path = cursor.getColumnIndex(Contract.Entry.COLUMN_POSTER);
-//                String posterFavorite = cursor.getString(poster_path);
+//                int  favorite = cursor.getColumnIndex(Contract.Entry.COLUMN_FAVORITE_OR_NOT);
+//                String favoriteStatus = cursor.getString(favorite);
 
                 Poster current = new Poster(
-                        titleFavorite, releasedateFavorite
-                , rateFavorite, overviewFavorite, poster,
-                        idFavoriteINT, favoriteStatus);
+                        titleFavorite, releasedateFavorite, rateFavorite,
+                        overviewFavorite, poster, idFavoriteINT);
 
-                Log.v("favorite ", titleFavorite);
-                Log.v("favorite ", releasedateFavorite);
-                Log.v("favorite ", rateFavorite);
-                Log.v("favorite ", overviewFavorite);
-                Log.v("favorite ", poster);
-                Log.v("favorite ", String.valueOf(idFavoriteINT));
+                Log.v("favoriteAdapter", titleFavorite);
+                Log.v("favoriteAdapter", releasedateFavorite);
+                Log.v("favoriteAdapter", rateFavorite);
+                Log.v("favoriteAdapter", overviewFavorite);
+                Log.v("favoriteAdapter", poster);
+                Log.v("favoriteAdapter", String.valueOf(idFavoriteINT));
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("results", current);
                 mContext.startActivity(intent);

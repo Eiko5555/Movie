@@ -43,8 +43,9 @@ public class DetailActivity extends Activity {
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
     private List<String> reviewList = new ArrayList<>();
-    private String API_KEY = "KEYS";
+    private String API_KEY = "API";
     private String URL_BASE = "http://api.themoviedb.org/3/movie/";
+    String favoriteStatus = "N";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +73,12 @@ public class DetailActivity extends Activity {
 //                    Log.v("Detail", " favorite clicked");
                     Toast.makeText(DetailActivity.this,
                             "Saved to Favorite", Toast.LENGTH_LONG).show();
+
                     saveFavorite();
                 } else {
 //                    Log.v("Detail", " favorite removed");
                     Toast.makeText(DetailActivity.this,
-                            "Remed from Favorite", Toast.LENGTH_LONG).show();
+                            "unckecked Favorite", Toast.LENGTH_LONG).show();
 //                    deleteFavorite();
                 }
             }
@@ -84,9 +86,6 @@ public class DetailActivity extends Activity {
 
         String image = getIntent().getStringExtra("poster_path");
         Picasso.with(this).load(image).into(imageview);
-//        if (contentValues != null && contentValues.size() != 0){
-//            saveFavorite();
-//        }
 
         int currentId = getIntent().getExtras().getInt("id");
 //        Log.i("Detail onCreate", ",ID" + currentId);
@@ -109,25 +108,18 @@ public class DetailActivity extends Activity {
         String mOverview = getIntent().getExtras().getString("overview");
         String mReleaseDate = getIntent().getExtras().getString("release_date");
         String mRating = getIntent().getExtras().getString("vote_average");
-        //        Intent intent = getIntent();
-//        Poster movie = (Poster)intent.getParcelableExtra("results");
-//        int idmovie = movie.getId();
-////        String mid = String.valueOf(idmovie);
-//        String mTitle = movie.getTitle();
-//        String mPoster = movie.getImage();
-//        String mOverview = movie.getOverview();
-//        String mRating = movie.getVoteAverage();
-//        String mReleaseDate = movie.getReleaseDate();
 
-//        ContentValues contentValues = new ContentValues();
+        //        ContentValues contentValues = new ContentValues();
         contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, idmovie);
         contentValues.put(Contract.Entry.COLUMN_TITLE, mTitle);
         contentValues.put(Contract.Entry.COLUMN_POSTER, mPoster);
         contentValues.put(Contract.Entry.COLUMN_OVERVIEW, mOverview);
         contentValues.put(Contract.Entry.COLUMN_RATING, mRating);
         contentValues.put(Contract.Entry.COLUMN_RELEASEDATE, mReleaseDate);
-        contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "favoriteornot");
-        Log.v("insert id", idmovie);
+        if (favoriteStatus == "N" || favoriteStatus.equals("N")) {
+            contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "Y");
+        }else contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "N");
+        Log.v("insert id", idmovie );
 //        if (contentValues != null && contentValues.size() != 0) {
             String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
             String[] projectionExists = {Contract.Entry.COLUMN_TITLE};
@@ -167,7 +159,7 @@ public class DetailActivity extends Activity {
         if (cursor.moveToNext()) {
             cursor.getString(cursor.getColumnIndex(Contract.Entry.COLUMN_FAVORITE_OR_NOT));
             Log.v("favorite() cursor", String.valueOf(cursor.getCount()));
-            Log.v("Status", "Alredy in a favorite list");
+            Log.v("Status", Contract.Entry.COLUMN_FAVORITE_OR_NOT);
 //            favoriteButton.setChecked(true);
             cursor.close();
             return true;

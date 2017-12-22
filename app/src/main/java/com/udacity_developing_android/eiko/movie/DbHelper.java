@@ -39,6 +39,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 " INTEGER PRIMARY KEY ON CONFLICT REPLACE " +
                 " );" );
         Log.v("TABLE id name: ", Contract.Entry.COLUMN_MOVIE_ID);
+        Log.v("TABLE favorite status: ", Contract.Entry.COLUMN_FAVORITE_OR_NOT);
     }
 
     @Override
