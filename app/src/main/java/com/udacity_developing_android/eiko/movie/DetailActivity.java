@@ -116,9 +116,8 @@ public class DetailActivity extends Activity {
         contentValues.put(Contract.Entry.COLUMN_OVERVIEW, mOverview);
         contentValues.put(Contract.Entry.COLUMN_RATING, mRating);
         contentValues.put(Contract.Entry.COLUMN_RELEASEDATE, mReleaseDate);
-        if (favoriteStatus == "N" || favoriteStatus.equals("N")) {
-            contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "Y");
-        }else contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "N");
+        contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "Y");
+        Log.v("checking", String.valueOf(contentValues));
         Log.v("insert id", idmovie );
 //        if (contentValues != null && contentValues.size() != 0) {
             String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
@@ -143,7 +142,11 @@ public class DetailActivity extends Activity {
 //            Intent intent = getIntent();
 //            Poster current = intent.getParcelableExtra("results");
 //            String title = current.getTitle();
-
+Log.v("favorite() result", Contract.Entry.COLUMN_TITLE);
+        Log.v("checking", String.valueOf(contentValues));
+//        if (contentValues.containsKey("Y")){
+//            favoriteButton.setChecked(true);
+//        }
         Cursor cursor = null;
         int id = getIntent().getExtras().getInt("id");
 //        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, String.valueOf(id));
@@ -157,9 +160,17 @@ public class DetailActivity extends Activity {
                     projection, selection, selectionArgs, null);
 //        }
         if (cursor.moveToNext()) {
-            cursor.getString(cursor.getColumnIndex(Contract.Entry.COLUMN_FAVORITE_OR_NOT));
+            favoriteStatus = cursor.getString(cursor.getColumnIndex
+                    ("favoriteornot"));
+            Log.v("check favorite", favoriteStatus);
+
             Log.v("favorite() cursor", String.valueOf(cursor.getCount()));
             Log.v("Status", Contract.Entry.COLUMN_FAVORITE_OR_NOT);
+            if (favoriteStatus.equals("N")){
+                favoriteButton.setChecked(false);
+            }else {
+                favoriteButton.setChecked(true);
+            }
 //            favoriteButton.setChecked(true);
             cursor.close();
             return true;
