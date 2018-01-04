@@ -43,9 +43,10 @@ public class DetailActivity extends Activity {
     private List<String> trailerListkey = new ArrayList<>();
     private List<String> trailerName = new ArrayList<>();
     private List<String> reviewList = new ArrayList<>();
-    private String API_KEY = "API";
+    private String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
+    //"API";
     private String URL_BASE = "http://api.themoviedb.org/3/movie/";
-    String favoriteStatus = "N";
+    boolean favoriteStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,8 @@ public class DetailActivity extends Activity {
         tv_summery = (TextView) findViewById(R.id.summery);
         favoriteButton = (ToggleButton) findViewById(R.id.img_button);
 
-        favorite();
+        favoriteStatus = favorite();
+//        favoriteButton.setChecked();
 
         tv_title.setText(getIntent().getExtras().getString("title"));
         tv_releasedate.setText(getIntent().getExtras().getString("release_date"));
@@ -70,13 +72,11 @@ public class DetailActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-//                    Log.v("Detail", " favorite clicked");
+                    saveFavorite();
+                    favoriteStatus = true;
                     Toast.makeText(DetailActivity.this,
                             "Saved to Favorite", Toast.LENGTH_LONG).show();
-
-                    saveFavorite();
-                } else {
-//                    Log.v("Detail", " favorite removed");
+                    } else {
                     Toast.makeText(DetailActivity.this,
                             "unckecked Favorite", Toast.LENGTH_LONG).show();
 //                    deleteFavorite();
@@ -117,67 +117,57 @@ public class DetailActivity extends Activity {
         contentValues.put(Contract.Entry.COLUMN_RATING, mRating);
         contentValues.put(Contract.Entry.COLUMN_RELEASEDATE, mReleaseDate);
         contentValues.put(Contract.Entry.COLUMN_FAVORITE_OR_NOT, "Y");
-        Log.v("checking", String.valueOf(contentValues));
-        Log.v("insert id", idmovie );
+
+        Log.v("checking", contentValues.toString());
+        Log.v("insert id", idmovie);
+        Log.v("savefav()", String.valueOf(favoriteStatus));
 //        if (contentValues != null && contentValues.size() != 0) {
+        if (favoriteStatus) {
             String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
             String[] projectionExists = {Contract.Entry.COLUMN_TITLE};
             String[] selectionArgsExists = {idmovie.toString()};
 //            Cursor cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
 //                    projectionExists, selectionExists, selectionArgsExists, null);
 //             if (cursor.getCount() <= 0) {
-        if (contentValues != null && contentValues.size() != 0) {
+//        if (contentValues != null && contentValues.size() != 0) {
             getContentResolver().update(Contract.Entry.CONTENT_URI,
-                    contentValues,selectionExists,selectionArgsExists);
-        }else {
+                    contentValues, selectionExists, selectionArgsExists);
+        } else {
             Uri savefavUri = getContentResolver().insert(
                     Contract.Entry.CONTENT_URI, contentValues);
-            Log.i("Detail,saveFavorite()", String.valueOf(savefavUri));
+            Log.v("Detail,saveFavorite()", savefavUri.toString());
         }
 //            }
 //        }
     }
 
     public boolean favorite() {
-//            Intent intent = getIntent();
-//            Poster current = intent.getParcelableExtra("results");
-//            String title = current.getTitle();
-Log.v("favorite() result", Contract.Entry.COLUMN_TITLE);
-        Log.v("checking", String.valueOf(contentValues));
-//        if (contentValues.containsKey("Y")){
-//            favoriteButton.setChecked(true);
-//        }
+        Log.v("Checking fav status", String.valueOf(favoriteStatus));
         Cursor cursor = null;
         int id = getIntent().getExtras().getInt("id");
-//        contentValues.put(Contract.Entry.COLUMN_MOVIE_ID, String.valueOf(id));
-//        if (contentValues != null && contentValues.size() != 0) {
-            String title = getIntent().getStringExtra("title");
-            String selection = Contract.Entry.COLUMN_MOVIE_ID + "=?";
-            String[] projection = {Contract.Entry.COLUMN_TITLE};
-            String[] selectionArgs = {String.valueOf(id)};
-//            Log.i("Detail: favorite table", title);
-            cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
-                    projection, selection, selectionArgs, null);
-//        }
-        if (cursor.moveToNext()) {
-            favoriteStatus = cursor.getString(cursor.getColumnIndex
-                    ("favoriteornot"));
-            Log.v("check favorite", favoriteStatus);
+        String selection = Contract.Entry.COLUMN_MOVIE_ID + "=?";
+        String[] projection = {Contract.Entry.COLUMN_FAVORITE_OR_NOT};
+        String[] selectionArgs = {String.valueOf(id)};
+        cursor = getContentResolver().query(Contract.Entry.CONTENT_URI,
+                projection, selection, selectionArgs, null);
+        Log.v("fav()", String.valueOf(cursor.getCount()));
+        Log.v("fav()", String.valueOf(favoriteStatus));
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            Log.v("fav()", String.valueOf(cursor.getString(cursor.getColumnIndex
+                    ("favoriteornot"))));
 
-            Log.v("favorite() cursor", String.valueOf(cursor.getCount()));
-            Log.v("Status", Contract.Entry.COLUMN_FAVORITE_OR_NOT);
-            if (favoriteStatus.equals("N")){
-                favoriteButton.setChecked(false);
-            }else {
+            if (cursor.getString(cursor.getColumnIndex
+                    ("favoriteornot")).equals("Y")) {
+                Log.v("fav()", "checking.");
                 favoriteButton.setChecked(true);
+                cursor.close();
+                return true;
             }
-//            favoriteButton.setChecked(true);
-            cursor.close();
-            return true;
-        } else {
-            cursor.close();
-            return false;
         }
+        cursor.close();
+        favoriteButton.setChecked(false);
+        return false;
     }
 
     private void excuteTrailer() {
@@ -206,7 +196,7 @@ Log.v("favorite() result", Contract.Entry.COLUMN_TITLE);
                 }
 //                Log.i("In fetchTrailer: ", "URL for youtube = " + youtubeURL
 //                        + trailerListkey.get(i));
-                Log.i("In fetchTrailer: ", "Trailer name: " + trailerName.get(i));
+//                Log.i("In fetchTrailer: ", "Trailer name: " + trailerName.get(i));
             }
         }
 
@@ -263,8 +253,7 @@ Log.v("favorite() result", Contract.Entry.COLUMN_TITLE);
             }
 //            Log.i("Detail onPostExecute ", "trailer url" +
 //                    youtubeUrl + trailerListkey);
-            Log.i("Detail onPostExecute ", "trailer name" +
-                    trailerName);
+//            Log.i("Detail onPostExecute ","trailer name" + trailerName);
             RecyclerView recyclerView =
                     (RecyclerView) findViewById(R.id.trailerrecyclerview);
             final TrailerAdapter trailerAdapter = new TrailerAdapter(
@@ -286,7 +275,7 @@ Log.v("favorite() result", Contract.Entry.COLUMN_TITLE);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
                 reviewList.add(i, object.getString("content"));
-                Log.i("In Review", reviewList.get(i));
+//                Log.i("In Review", reviewList.get(i));
             }
         }
 
@@ -295,13 +284,13 @@ Log.v("favorite() result", Contract.Entry.COLUMN_TITLE);
             HttpURLConnection httpURLConnection;
             BufferedReader bufferedReader;
             String dataString;
-            Log.v("Review ID ", stringIdReview);
+//            Log.v("Review ID ", stringIdReview);
             try {
                 String URL_BASE_REVIEW = URL_BASE + stringIdReview + "/reviews";
                 Uri uri = Uri.parse(URL_BASE_REVIEW).buildUpon().appendQueryParameter(
                         "api_key", API_KEY).build();
                 URL url = new URL(uri.toString());
-                Log.i("Review URL", String.valueOf(url));
+//                Log.i("Review URL", String.valueOf(url));
                 httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.connect();

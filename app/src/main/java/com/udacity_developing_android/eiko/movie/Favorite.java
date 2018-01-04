@@ -47,8 +47,8 @@ overviewFavorite, poster, idFavoriteINT);*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gridview);
         TextView textviewLoading = (TextView)findViewById(R.id.loading_text);
-        Log.v("favorite--", String.valueOf(projection));
-        Log.v("favorite--", String.valueOf(favoriteUri));
+        Log.v("favorite--", projection.toString());
+        Log.v("favorite--", favoriteUri.toString());
         mFavoriteAdapter = new FavoriteAdapter(this, null);
         final GridView gridView = (GridView)findViewById(R.id.gridview);
         if (mFavoriteAdapter != null){
@@ -58,6 +58,8 @@ overviewFavorite, poster, idFavoriteINT);*/
 //        ListView listView = (ListView) findViewById(R.id.favorite_listview);
 //        listView.setAdapter(mFavoriteAdapter);
         getSupportLoaderManager().initLoader(CURSOR_ID, null, this);
+        if (mFavoriteAdapter == null)
+            textviewLoading.setVisibility(View.VISIBLE);
     }
 
     @Override

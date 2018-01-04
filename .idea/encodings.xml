@@ -2,6 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/Nexus_6_API_24_2 [emulator-5554]/data/data/com.udacity_developing_android.eiko.movie/databases/movies.db-journal" charset="UTF-16" />
+    <file url="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/emulator-5554/data/data/com.udacity_developing_android.eiko.movie/databases/movies.db" charset="UTF-16" />
+    <file url="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/emulator-5554/data/data/com.udacity_developing_android.eiko.movie/databases/movies.db-journal" charset="ISO-8859-1" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

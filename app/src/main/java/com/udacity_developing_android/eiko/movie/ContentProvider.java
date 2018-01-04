@@ -18,8 +18,7 @@ import android.widget.Toast;
 public class ContentProvider extends android.content.ContentProvider {
     public static final UriMatcher uriMatcher =
             new UriMatcher(UriMatcher.NO_MATCH);
-//    public static String favoritemovieId =
-//            Contract.Entry.COLUMN_MOVIE_ID + " = ? ";
+
     static int FAVORITE = 100;
     static int FAVORITE_ID = 101;
     public static String FAVORITE_TAG = "Y";

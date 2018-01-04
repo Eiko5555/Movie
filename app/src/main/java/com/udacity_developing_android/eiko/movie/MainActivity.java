@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-                public String API_KEY = "API";
+                public String API_KEY = "a4f36a9495b94f99828b2636e79fb982";
+//                        "API";
 
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
@@ -156,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
                 String line;
                 while ((line = buffReader.readLine()) != null) {
                     sb.append(line + "\n");
-//                    Log.v("line ", line);
                 }
                 if (sb.length() == 0) {
                     return null;
