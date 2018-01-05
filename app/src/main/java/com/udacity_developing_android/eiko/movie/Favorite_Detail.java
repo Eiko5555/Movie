@@ -34,6 +34,5 @@ public class Favorite_Detail extends Activity{
 
         String image = getIntent().getStringExtra("poster_path");
         Picasso.with(this).load(image).into(imageview);
-
     }
 }

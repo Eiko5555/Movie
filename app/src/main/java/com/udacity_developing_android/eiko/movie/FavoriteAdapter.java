@@ -22,10 +22,14 @@ import java.util.ArrayList;
 
 public class FavoriteAdapter extends CursorAdapter {
     Context mContext;
+    Cursor c;
+//    int position = cursor.getColumnIndex(Contract.Entry.COLUMN_POSTER);
+//    final String poster = cursor.getString(position);
 
     FavoriteAdapter(Context context, Cursor c) {
         super(context, c);
         this.mContext = context;
+        this.c = c;
     }
 
     @Override
@@ -42,22 +46,33 @@ public class FavoriteAdapter extends CursorAdapter {
         ImageView posterImage = (ImageView)view.findViewById(R.id.image_for_grid);
         Log.v("favadapter 2 ", poster);
         Picasso.with(mContext).load(poster).into(posterImage);
+        int id = cursor.getColumnIndex(Contract.Entry.COLUMN_MOVIE_ID);
+        final int idFavoriteINT = cursor.getInt(id);
+//                String idFavorite = cursor.getString(id);
+        int title = cursor.getColumnIndex(Contract.Entry.COLUMN_TITLE);
+        final String titleFavorite = cursor.getString(title);
+        int rate = cursor.getColumnIndex(Contract.Entry.COLUMN_RATING);
+        final String rateFavorite = cursor.getString(rate);
+        int overview = cursor.getColumnIndex(Contract.Entry.COLUMN_OVERVIEW);
+        final String overviewFavorite = cursor.getString(overview);
+        int releasedate = cursor.getColumnIndex(Contract.Entry.COLUMN_RELEASEDATE);
+        final String releasedateFavorite = cursor.getString(releasedate);
         cursor.getPosition();
         posterImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v("favAdater", "saved poster clicked.");
-                int id = cursor.getColumnIndex(Contract.Entry.COLUMN_MOVIE_ID);
-                int idFavoriteINT = cursor.getInt(id);
-//                String idFavorite = cursor.getString(id);
-                int title = cursor.getColumnIndex(Contract.Entry.COLUMN_TITLE);
-                String titleFavorite = cursor.getString(title);
-                int rate = cursor.getColumnIndex(Contract.Entry.COLUMN_RATING);
-                String rateFavorite = cursor.getString(rate);
-                int overview = cursor.getColumnIndex(Contract.Entry.COLUMN_OVERVIEW);
-                String overviewFavorite = cursor.getString(overview);
-                int releasedate = cursor.getColumnIndex(Contract.Entry.COLUMN_RELEASEDATE);
-                String releasedateFavorite = cursor.getString(releasedate);
+//                int id = cursor.getColumnIndex(Contract.Entry.COLUMN_MOVIE_ID);
+//                int idFavoriteINT = cursor.getInt(id);
+////                String idFavorite = cursor.getString(id);
+//                int title = cursor.getColumnIndex(Contract.Entry.COLUMN_TITLE);
+//                String titleFavorite = cursor.getString(title);
+//                int rate = cursor.getColumnIndex(Contract.Entry.COLUMN_RATING);
+//                String rateFavorite = cursor.getString(rate);
+//                int overview = cursor.getColumnIndex(Contract.Entry.COLUMN_OVERVIEW);
+//                String overviewFavorite = cursor.getString(overview);
+//                int releasedate = cursor.getColumnIndex(Contract.Entry.COLUMN_RELEASEDATE);
+//                String releasedateFavorite = cursor.getString(releasedate);
 
 //                Poster current = new Poster(
 //                        titleFavorite, releasedateFavorite, rateFavorite,
