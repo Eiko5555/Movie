@@ -25,7 +25,7 @@ public class Poster implements Parcelable {
 
     public Poster(String title, String releasedate,
                   String rate, String overview,
-                  String poster_path, int id ) {
+                  String poster_path, int id) {
         this.title = title;
         this.release_date = releasedate;
         this.vote_average = rate;

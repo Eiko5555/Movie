@@ -10,19 +10,17 @@ import android.util.Log;
  */
 
 public class DbHelper extends SQLiteOpenHelper {
+    public static final String DATABESE_NAME = "movies.db";
+    public static final int DATABESE_NUM = 1;
     private static DbHelper helper;
+    public DbHelper(Context context) {
+        super(context, DATABESE_NAME, null, DATABESE_NUM);
+    }
 
     public static synchronized DbHelper getHelper(Context context) {
         if (helper == null)
             helper = new DbHelper(context);
         return helper;
-    }
-
-    public static final String DATABESE_NAME = "movies.db";
-    public static final int DATABESE_NUM = 1;
-
-    public DbHelper(Context context) {
-        super(context, DATABESE_NAME, null, DATABESE_NUM);
     }
 
     @Override
@@ -37,7 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 Contract.Entry.COLUMN_FAVORITE_OR_NOT + " TEXT, " +
                 Contract.Entry.COLUMN_MOVIE_ID +
                 " INTEGER PRIMARY KEY ON CONFLICT REPLACE " +
-                " );" );
+                " );");
         Log.v("TABLE id name: ", Contract.Entry.COLUMN_MOVIE_ID);
         Log.v("TABLE favorite status: ", Contract.Entry.COLUMN_FAVORITE_OR_NOT);
     }

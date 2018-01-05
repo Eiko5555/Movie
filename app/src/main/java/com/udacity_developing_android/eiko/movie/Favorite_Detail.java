@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
  * Created by eiko on 1/4/2018.
  */
 
-public class Favorite_Detail extends Activity{
+public class Favorite_Detail extends Activity {
     private ImageView imageview;
     private TextView tv_title, tv_releasedate, tv_rate, tv_summery;
 

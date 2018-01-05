@@ -18,11 +18,9 @@ import android.widget.Toast;
 public class ContentProvider extends android.content.ContentProvider {
     public static final UriMatcher uriMatcher =
             new UriMatcher(UriMatcher.NO_MATCH);
-
+    public static String NOT_FAVORITE_TAG = "N";
     static int FAVORITE = 100;
     static int FAVORITE_ID = 101;
-    public static String FAVORITE_TAG = "Y";
-    public static String NOT_FAVORITE_TAG = "N";
 
     static {
         uriMatcher.addURI(Contract.CONTENT_AUTHORITY,
@@ -39,11 +37,11 @@ public class ContentProvider extends android.content.ContentProvider {
         return true;
     }
 
-//    public Cursor getAll() {
-//        return mDpHelper.getReadableDatabase().query(
-//                Contract.Entry.TABLE_NAME, null, null, null,
-//                null, null, null);
-//    }
+    public Cursor getAll() {
+        return mDpHelper.getReadableDatabase().query(
+                Contract.Entry.TABLE_NAME, null, null, null,
+                null, null, null);
+    }
 
     @Nullable
     @Override
@@ -60,7 +58,6 @@ public class ContentProvider extends android.content.ContentProvider {
                     selection, selectionArgs, null, null, sortOrder);
         } else if (urimatcher == FAVORITE_ID) {
             selection = Contract.Entry._ID + "=?";
-//            projection = {Contract.Entry.COLUMN_TITLE};
             selectionArgs = new String[]
                     {String.valueOf(ContentUris.parseId(uri))};
             c = db.query(Contract.Entry.TABLE_NAME, projection, selection,
@@ -69,7 +66,7 @@ public class ContentProvider extends android.content.ContentProvider {
         if (c.getCount() < 0) {
             Log.v("Content", "cursor is empty");
         }
-        c.setNotificationUri(getContext().getContentResolver(),uri);
+        c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 
@@ -100,14 +97,10 @@ public class ContentProvider extends android.content.ContentProvider {
         Log.v("ContentProvider", "insert START");
         SQLiteDatabase db = mDpHelper.getWritableDatabase();
         String selection = null;
-        String[] selectionArgs  = null;
+        String[] selectionArgs = null;
         long id = 0;
-        /*if (id == -1){
-            db.update(Contract.Entry.TABLE_NAME, values,
-                    selection, selectionArgs);
-        }*/
 
-         id = db.insert(Contract.Entry.TABLE_NAME, null, values);
+        id = db.insert(Contract.Entry.TABLE_NAME, null, values);
         Log.v("insertFav", String.valueOf(id));
 
         if (id > 0)
@@ -153,7 +146,7 @@ public class ContentProvider extends android.content.ContentProvider {
 
     private int updateFavorite(Uri uri, ContentValues values,
                                String selection, String[] selectionArgs) {
-        if (values.containsKey(Contract.Entry.COLUMN_TITLE)){
+        if (values.containsKey(Contract.Entry.COLUMN_TITLE)) {
             values.getAsString(Contract.Entry.COLUMN_TITLE);
         }
 

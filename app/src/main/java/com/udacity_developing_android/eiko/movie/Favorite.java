@@ -1,6 +1,5 @@
 package com.udacity_developing_android.eiko.movie;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +10,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,11 +23,7 @@ import java.util.List;
 public class Favorite extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
     static final int CURSOR_ID = 2;
-
-    private Uri favoriteUri = Contract.Entry.CONTENT_URI;
-    private FavoriteAdapter mFavoriteAdapter;
     List<Poster> movie = new ArrayList<>();
-
     String[] projection = new String[]{
             Contract.Entry._ID,
             Contract.Entry.COLUMN_TITLE,
@@ -38,24 +31,24 @@ public class Favorite extends AppCompatActivity
             Contract.Entry.COLUMN_OVERVIEW,
             Contract.Entry.COLUMN_RATING,
             Contract.Entry.COLUMN_RELEASEDATE,
-        Contract.Entry.COLUMN_FAVORITE_OR_NOT
+            Contract.Entry.COLUMN_FAVORITE_OR_NOT
     };
+    private Uri favoriteUri = Contract.Entry.CONTENT_URI;
+    private FavoriteAdapter mFavoriteAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gridview);
-        TextView textviewLoading = (TextView)findViewById(R.id.loading_text);
+        TextView textviewLoading = (TextView) findViewById(R.id.loading_text);
         Log.v("favorite--", projection.toString());
         Log.v("favorite--", favoriteUri.toString());
         mFavoriteAdapter = new FavoriteAdapter(this, null);
-        final GridView gridView = (GridView)findViewById(R.id.gridview);
-        if (mFavoriteAdapter != null){
+        final GridView gridView = (GridView) findViewById(R.id.gridview);
+        if (mFavoriteAdapter != null) {
             textviewLoading.setVisibility(View.INVISIBLE);
         }
         gridView.setAdapter(mFavoriteAdapter);
-//        ListView listView = (ListView) findViewById(R.id.favorite_listview);
-//        listView.setAdapter(mFavoriteAdapter);
         getSupportLoaderManager().initLoader(CURSOR_ID, null, this);
         if (mFavoriteAdapter == null)
             textviewLoading.setVisibility(View.VISIBLE);

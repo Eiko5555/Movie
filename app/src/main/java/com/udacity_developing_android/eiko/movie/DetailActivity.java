@@ -37,6 +37,7 @@ import java.util.List;
 
 public class DetailActivity extends Activity {
     ContentValues contentValues = new ContentValues();
+    boolean favoriteStatus = false;
     private ImageView imageview;
     private TextView tv_title, tv_releasedate, tv_rate, tv_summery;
     private ToggleButton favoriteButton;
@@ -45,7 +46,6 @@ public class DetailActivity extends Activity {
     private List<String> reviewList = new ArrayList<>();
     private String API_KEY = "API";
     private String URL_BASE = "http://api.themoviedb.org/3/movie/";
-    boolean favoriteStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class DetailActivity extends Activity {
                     favoriteStatus = true;
                     Toast.makeText(DetailActivity.this,
                             "Saved to Favorite", Toast.LENGTH_LONG).show();
-                    } else {
+                } else {
                     Toast.makeText(DetailActivity.this,
                             "unckecked Favorite", Toast.LENGTH_LONG).show();
 //                    deleteFavorite();
@@ -116,7 +116,6 @@ public class DetailActivity extends Activity {
         Log.v("savefav()", String.valueOf(favoriteStatus));
         if (favoriteStatus) {
             String selectionExists = Contract.Entry.COLUMN_MOVIE_ID + "=?";
-            String[] projectionExists = {Contract.Entry.COLUMN_TITLE};
             String[] selectionArgsExists = {idmovie.toString()};
             getContentResolver().update(Contract.Entry.CONTENT_URI,
                     contentValues, selectionExists, selectionArgsExists);
@@ -173,16 +172,12 @@ public class DetailActivity extends Activity {
         private void getJsonData(String json) throws JSONException {
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
-            final String youtubeURL = "https://www.youtube.com/watch?v=";
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
                 if (object.getString("site").contentEquals("YouTube")) {
                     trailerListkey.add(i, object.getString("key"));
                     trailerName.add(i, object.getString("name"));
                 }
-//                Log.i("In fetchTrailer: ", "URL for youtube = " + youtubeURL
-//                        + trailerListkey.get(i));
-//                Log.i("In fetchTrailer: ", "Trailer name: " + trailerName.get(i));
             }
         }
 
@@ -198,7 +193,7 @@ public class DetailActivity extends Activity {
                 Uri uri = Uri.parse(URL_BASE).buildUpon().appendQueryParameter(
                         "api_key", API_KEY).build();
                 URL url = new URL(uri.toString());
-//                Log.i("Detail:doInbackground", " trailer url " + url);
+                Log.i("Detail:doInbackground", " trailer url " + url);
 
                 httpUrlConnection = (HttpURLConnection) url.openConnection();
                 httpUrlConnection.setRequestMethod("GET");
@@ -237,9 +232,9 @@ public class DetailActivity extends Activity {
                 trailer.name = trailerName.get(i);
                 trailerArrayList.add(trailer);
             }
-//            Log.i("Detail onPostExecute ", "trailer url" +
-//                    youtubeUrl + trailerListkey);
-//            Log.i("Detail onPostExecute ","trailer name" + trailerName);
+            Log.i("Detail onPostExecute ", "trailer url" +
+                    youtubeUrl + trailerListkey);
+            Log.i("Detail onPostExecute ", "trailer name" + trailerName);
             RecyclerView recyclerView =
                     (RecyclerView) findViewById(R.id.trailerrecyclerview);
             final TrailerAdapter trailerAdapter = new TrailerAdapter(
@@ -261,7 +256,7 @@ public class DetailActivity extends Activity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
                 reviewList.add(i, object.getString("content"));
-//                Log.i("In Review", reviewList.get(i));
+                Log.i("In Review", reviewList.get(i));
             }
         }
 
@@ -270,13 +265,13 @@ public class DetailActivity extends Activity {
             HttpURLConnection httpURLConnection;
             BufferedReader bufferedReader;
             String dataString;
-//            Log.v("Review ID ", stringIdReview);
+            Log.v("Review ID ", stringIdReview);
             try {
                 String URL_BASE_REVIEW = URL_BASE + stringIdReview + "/reviews";
                 Uri uri = Uri.parse(URL_BASE_REVIEW).buildUpon().appendQueryParameter(
                         "api_key", API_KEY).build();
                 URL url = new URL(uri.toString());
-//                Log.i("Review URL", String.valueOf(url));
+                Log.i("Review URL", String.valueOf(url));
                 httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.connect();

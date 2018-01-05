@@ -5,17 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.udacity_developing_android.eiko.movie.MainActivity">
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Loading...."
-        android:gravity="center"
-        android:id="@+id/loading_text"/>
-    <TextView
+        android:id="@+id/loading_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:id="@+id/error_text"/>
+        android:text="Loading...." />
+
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" />
 
     <GridView
         android:id="@+id/gridview"
