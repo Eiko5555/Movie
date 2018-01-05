@@ -30,8 +30,7 @@ public class Favorite extends AppCompatActivity
     private Uri favoriteUri = Contract.Entry.CONTENT_URI;
     private FavoriteAdapter mFavoriteAdapter;
     List<Poster> movie = new ArrayList<>();
-/*titleFavorite, releasedateFavorite, rateFavorite,
-overviewFavorite, poster, idFavoriteINT);*/
+
     String[] projection = new String[]{
             Contract.Entry._ID,
             Contract.Entry.COLUMN_TITLE,

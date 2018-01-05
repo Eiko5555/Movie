@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".DetailActivity" />
         <activity android:name=".Favorite"/>
+        <activity android:name=".Favorite_Detail"/>
         <provider
             android:authorities="com.udacity_developing_android.eiko.movie"
             android:name="com.udacity_developing_android.eiko.movie.ContentProvider"

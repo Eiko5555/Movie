@@ -3,6 +3,7 @@ package com.udacity_developing_android.eiko.movie;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +28,6 @@ public class FavoriteAdapter extends CursorAdapter {
         this.mContext = context;
     }
 
-
-
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(
@@ -40,12 +39,7 @@ public class FavoriteAdapter extends CursorAdapter {
 
         int position = cursor.getColumnIndex(Contract.Entry.COLUMN_POSTER);
         final String poster = cursor.getString(position);
-//        TextView titleText = (TextView) view.findViewById(R.id.title_favorite);
-//        titleText.setText(poster);
         ImageView posterImage = (ImageView)view.findViewById(R.id.image_for_grid);
-//        String POSTER_URL_BASE = "http://image.tmdb.org/t/p/w185";
-//        String POSTER_URL = POSTER_URL_BASE + poster;
-//        Log.v("FavAdapter", POSTER_URL);
         Log.v("favadapter 2 ", poster);
         Picasso.with(mContext).load(poster).into(posterImage);
         cursor.getPosition();
@@ -64,21 +58,24 @@ public class FavoriteAdapter extends CursorAdapter {
                 String overviewFavorite = cursor.getString(overview);
                 int releasedate = cursor.getColumnIndex(Contract.Entry.COLUMN_RELEASEDATE);
                 String releasedateFavorite = cursor.getString(releasedate);
-//                int  favorite = cursor.getColumnIndex(Contract.Entry.COLUMN_FAVORITE_OR_NOT);
-//                String favoriteStatus = cursor.getString(favorite);
 
-                Poster current = new Poster(
-                        titleFavorite, releasedateFavorite, rateFavorite,
-                        overviewFavorite, poster, idFavoriteINT);
-
+//                Poster current = new Poster(
+//                        titleFavorite, releasedateFavorite, rateFavorite,
+//                        overviewFavorite, poster, idFavoriteINT);
                 Log.v("favoriteAdapter", titleFavorite);
                 Log.v("favoriteAdapter", releasedateFavorite);
                 Log.v("favoriteAdapter", rateFavorite);
                 Log.v("favoriteAdapter", overviewFavorite);
                 Log.v("favoriteAdapter", poster);
                 Log.v("favoriteAdapter", String.valueOf(idFavoriteINT));
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("results", current);
+                Intent intent = new Intent(context, Favorite_Detail.class);
+//                intent.putExtra("results", current);
+                intent.putExtra("poster_path", poster);
+                intent.putExtra("title", titleFavorite);
+                intent.putExtra("release_date", releasedateFavorite);
+                intent.putExtra("vote_average", rateFavorite);
+                intent.putExtra("overview", overviewFavorite);
+                intent.putExtra("id", String.valueOf(idFavoriteINT));
                 mContext.startActivity(intent);
             }
         });
