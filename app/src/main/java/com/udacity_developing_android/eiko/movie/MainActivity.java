@@ -39,52 +39,46 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.gridview);
-//        gridview = (GridView) findViewById(R.id.gridview);
-
-        if (savedInstanceState != null){
+        setContentView(R.layout.gridview);
+        loading_text = (TextView) findViewById(R.id.loading_text);
+        gridview = (GridView) findViewById(R.id.gridview);
+        if(savedInstanceState != null){
             mGridImage = savedInstanceState.
                     getParcelableArrayList("mGrdimage");
             Log.v("main saved", String.valueOf(mGridImage));
-
-//            mImageAdapter = new ImageAdapter(this,
-//                    R.layout.image_grid, mGridImage);
-//            gridview.setAdapter(mImageAdapter);
-//            new AsyncHttpTask().execute();
-            }
-            setContentView(R.layout.gridview);
-            loading_text = (TextView) findViewById(R.id.loading_text);
-            gridview = (GridView) findViewById(R.id.gridview);
+        }else {
             mGridImage = new ArrayList<>();
-            mImageAdapter = new ImageAdapter(this,
-                    R.layout.image_grid, mGridImage);
-            gridview.setAdapter(mImageAdapter);
             new AsyncHttpTask().execute();
-            gridview.setOnItemClickListener(
-                    new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view,
-                                                int position, long id) {
-                            Poster current = mImageAdapter.getItem(position);
-                            Intent intent = new Intent(MainActivity.this,
-                                    DetailActivity.class);
-                            intent.putExtra("poster_path", current.getImage());
-                            intent.putExtra("title", current.getTitle());
-                            intent.putExtra("release_date", current.getReleaseDate());
-                            intent.putExtra("vote_average", current.getVoteAverage());
-                            intent.putExtra("overview", current.getOverview());
-                            intent.putExtra("id", current.getId());
-                            startActivity(intent);
-                            Log.v("MainActivity", "poster clicked");
-                        }
-                    });
+        }
+        mImageAdapter = new ImageAdapter(this,
+                R.layout.image_grid, mGridImage);
+        gridview.setAdapter(mImageAdapter);
+//        new AsyncHttpTask().execute();
+        gridview.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        Poster current = mImageAdapter.getItem(position);
+                        Intent intent = new Intent(MainActivity.this,
+                                DetailActivity.class);
+                        intent.putExtra("poster_path", current.getImage());
+                        intent.putExtra("title", current.getTitle());
+                        intent.putExtra("release_date", current.getReleaseDate());
+                        intent.putExtra("vote_average", current.getVoteAverage());
+                        intent.putExtra("overview", current.getOverview());
+                        intent.putExtra("id", current.getId());
+                        startActivity(intent);
+                        Log.v("MainActivity", "poster clicked");
+                    }
+                });
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("mGrdimage",mGridImage);
         super.onSaveInstanceState(outState);
-
+        outState.putParcelableArrayList("mGrdimage", mGridImage);
+        Log.v("main saved", String.valueOf(mGridImage));
     }
 
     @Override
@@ -135,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         public String PATH_ONE = "3";
         public String PATH_TWO = "movie";
         public String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
-        public String API_KEY =   "API";
+        public String API_KEY = "API";
 
         String SORT_POPULAR = "popular";
         String SORT_TOPRATED = "top_rated";
